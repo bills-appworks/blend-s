@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>「ブレンド・S」オープニング風ロゴアニメーションジェネレータ（αプレビュー版）</title>
+    <link rel="stylesheet" href="blend-s_logo_anime.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+    <script type="text/javascript" src="jsgif/b64.js"></script>
+    <script type="text/javascript" src="jsgif/LZWEncoder.js"></script>
+    <script type="text/javascript" src="jsgif/NeuQuant.js"></script>
+    <script type="text/javascript" src="jsgif/GIFEncoder.js"></script>
+    <script src="blend-s_logo_anime.js"></script>
+    <link rel="icon" href="blend-s_logo_anime_32x32.png" sizes="32x32" />
+    <link rel="icon" href="blend-s_logo_anime_192x192.png" sizes="192x192" />
+    <link rel="apple-touch-icon-precomposed" href="blend-s_logo_anime_180x180.png" />
+    <meta name="msapplication-TileImage" content="blend-s_logo_anime_270x270.png">
+    <meta name="description" content="「ブレンド・S」アニメオープニング冒頭風のロゴアニメーションを生成するアプリです。">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ">
+    <meta property="og:url" content="https://bills-appworks.github.io/blend-s/">
+    <meta property="og:description" content="「ブレンド・S」アニメオープニング冒頭風のロゴアニメーションを生成するアプリです。">
+    <meta property="og:image" content="https://bills-appworks.github.io/blend-s/share_image.png">
+    <meta property="og:site_name" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@billstw">
+    <meta name="twitter:creator:id" content="@billstw">
+    <meta name="twitter:description" content="「ブレンド・S」アニメオープニング冒頭風のロゴアニメーションを生成するアプリです。">
+    <meta name="twitter:title" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ">
+    <meta name="twitter:image" content="https://bills-appworks.github.io/blend-s/share_image.png">
+    <meta name="twitter:image:alt" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ">
+    <script src="google_analytics.js"></script>
+  </head>
+  <body>
+    <div id="body_title"><div id="title_blend">ブレンド・</div><div id="title_S">S<span id="title_S_vertical"></span></div></div>
+    <div id="description">オープニング風ロゴアニメーションジェネレータ（αプレビュー版）</div>
+    <div id="tab">
+      <span class="tab_element">CAFÉ STILE</span>
+      <span class="tab_element"><span class="tab_checkbox">☑</span>SADISTIC </span>
+      <span class="tab_element"><span class="tab_checkbox">☑</span>TSUNDERE </span>
+      <span class="tab_element"><span class="tab_checkbox">☑</span>IMOUTO </span>
+      <span class="tab_element"><span class="tab_checkbox">☑</span>ONEESAN </span>
+      <span class="tab_element"><span class="tab_checkbox">☑</span>IDOL </span>
+    </div>
+    <div id="content_area">
+      <div id="rendering_area">
+        <p id="rendering_performance">Rendering (目標: <span id="target_fps">--</span> fps / 実効: <span id="effective_fps">--</span> fps)</p>
+        <canvas id="rendering_canvas"></canvas>
+        <canvas id="measure_canvas"></canvas>
+      </div>
+      <div id="operation_area">
+        <span>
+          <button id="operation_animate">アニメーション</button>
+          <input type="checkbox" id="animation_priority_time" disabled="disabled" /><label for="animation_priority_time">時間優先</label>
+        </span>
+        <span>
+          <button id="operation_download">アニメーションGIF録画＆ダウンロード</button>
+        </span>
+      </div>
+      <div id="config_area">
+        <div id="sequence_1" class="sequence">
+          <div class="sequence_header">
+            <input type="checkbox" id="sequence_enable_1" class="sequence_enable" checked="checked" /><label for="sequence_enable_1">1番目</label>
+          </div>
+          <div class="sequence_text">
+            <div class="sequence_call">
+              <label for="config_call_1">コール: </label><input type="text" id="config_call_1" value="Smile" />
+            </div>
+            <div class="sequence_attribute">
+              <label for="config_attribute_1">属性: </label><input type="text" id="config_attribute_1" value="Sadistic" />
+            </div>
+            <div class="sequence_name">
+              <label for="config_name_1">名前: </label><input type="text" id="config_name_1" value="Maika Sakuranomiya" />
+            </div>
+          </div>
+          <div class="sequence_bgcolor">
+            <span>背景色: </span>
+            <input type="radio" name="config_bgcolor_preset_1" id="config_bgcolor_preset_1_1" value="preset_1" checked="checked" /><label for="config_bgcolor_preset_1_1" class="config_bgcolor_sample config_bgcolor_sample_1">■</label>
+            <input type="radio" name="config_bgcolor_preset_1" id="config_bgcolor_preset_1_2" value="preset_2"                   /><label for="config_bgcolor_preset_1_2" class="config_bgcolor_sample config_bgcolor_sample_2">■</label>
+            <input type="radio" name="config_bgcolor_preset_1" id="config_bgcolor_preset_1_3" value="preset_3"                   /><label for="config_bgcolor_preset_1_3" class="config_bgcolor_sample config_bgcolor_sample_3">■</label>
+            <input type="radio" name="config_bgcolor_preset_1" id="config_bgcolor_preset_1_4" value="preset_4"                   /><label for="config_bgcolor_preset_1_4" class="config_bgcolor_sample config_bgcolor_sample_4">■</label>
+            <input type="radio" name="config_bgcolor_preset_1" id="config_bgcolor_preset_1_5" value="preset_5"                   /><label for="config_bgcolor_preset_1_5" class="config_bgcolor_sample config_bgcolor_sample_5">■</label>
+            <input type="radio" name="config_bgcolor_preset_1" id="config_bgcolor_preset_1_6" value="preset_6"                   /><label for="config_bgcolor_preset_1_6" class="config_bgcolor_sample config_bgcolor_sample_6">■</label>
+            <input type="radio" name="config_bgcolor_preset_1" id="config_bgcolor_preset_1_7" value="preset_7"                   /><label for="config_bgcolor_preset_1_7" class="config_bgcolor_sample config_bgcolor_sample_7">■</label>
+          </div>
+          <div class="sequence_align">
+            <span>揃え方向: </span>
+            <input type="radio" name="config_align_1" id="config_align_1_left"   value="left"                     /><label for="config_align_1_left"   >←</label>
+            <input type="radio" name="config_align_1" id="config_align_1_right"  value="right"  checked="checked" /><label for="config_align_1_right"  >→</label>
+            <input type="radio" name="config_align_1" id="config_align_1_bottom" value="bottom"                   /><label for="config_align_1_bottom" >↓</label>
+            <input type="radio" name="config_align_1" id="config_align_1_top"    value="top"                      /><label for="config_align_1_top"    >↑</label>
+          </div>
+        </div> <!-- sequence -->
+        <div id="sequence_2" class="sequence">
+          <div class="sequence_header">
+            <input type="checkbox" id="sequence_enable_2" class="sequence_enable" checked="checked" /><label for="sequence_enable_2">2番目</label>
+          </div>
+          <div class="sequence_text">
+            <div class="sequence_call">
+              <label>コール: <input type="text" id="config_call_2" value="Sweet" /></label>
+            </div>
+            <div class="sequence_attribute">
+              <label>属性: <input type="text" id="config_attribute_2" value="Tsundere" /></label>
+            </div>
+            <div class="sequence_name">
+              <label>名前: <input type="text" id="config_name_2" value="Kaho Hinata" /></label>
+            </div>
+          </div>
+          <div class="sequence_bgcolor">
+            <span>背景色: </span>
+            <label class="config_bgcolor_sample config_bgcolor_sample_1"><input type="radio" name="config_bgcolor_preset_2" id="config_bgcolor_preset_2_1" value="preset_1"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_2"><input type="radio" name="config_bgcolor_preset_2" id="config_bgcolor_preset_2_2" value="preset_2" checked="checked" />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_3"><input type="radio" name="config_bgcolor_preset_2" id="config_bgcolor_preset_2_3" value="preset_3"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_4"><input type="radio" name="config_bgcolor_preset_2" id="config_bgcolor_preset_2_4" value="preset_4"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_5"><input type="radio" name="config_bgcolor_preset_2" id="config_bgcolor_preset_2_5" value="preset_5"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_6"><input type="radio" name="config_bgcolor_preset_2" id="config_bgcolor_preset_2_6" value="preset_6"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_7"><input type="radio" name="config_bgcolor_preset_2" id="config_bgcolor_preset_2_7" value="preset_7"                   />■</label>
+          </div>
+          <div class="sequence_align">
+            <span>揃え方向: </span>
+            <label><input type="radio" name="config_align_2" id="config_align_2_left"   value="left"   checked="checked" />←</label>
+            <label><input type="radio" name="config_align_2" id="config_align_2_right"  value="right"                    />→</label>
+            <label><input type="radio" name="config_align_2" id="config_align_2_bottom" value="bottom"                   />↓</label>
+            <label><input type="radio" name="config_align_2" id="config_align_2_top"    value="top"                      />↑</label>
+          </div>
+        </div> <!-- sequence -->
+        <div id="sequence_3" class="sequence">
+          <div class="sequence_header">
+            <input type="checkbox" id="sequence_enable_3" class="sequence_enable" checked="checked" /><label for="sequence_enable_3">3番目</label>
+          </div>
+          <div class="sequence_text">
+            <div class="sequence_call">
+              <label>コール: <input type="text" id="config_call_3" value="Sister" /></label>
+            </div>
+            <div class="sequence_attribute">
+              <label>属性: <input type="text" id="config_attribute_3" value="Imouto" /></label>
+            </div>
+            <div class="sequence_name">
+              <label>名前: <input type="text" id="config_name_3" value="Mafuyu Hoshikawa" /></label>
+            </div>
+          </div>
+          <div class="sequence_bgcolor">
+            <span>背景色: </span>
+            <label class="config_bgcolor_sample config_bgcolor_sample_1"><input type="radio" name="config_bgcolor_preset_3" id="config_bgcolor_preset_3_1" value="preset_1"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_2"><input type="radio" name="config_bgcolor_preset_3" id="config_bgcolor_preset_3_2" value="preset_2"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_3"><input type="radio" name="config_bgcolor_preset_3" id="config_bgcolor_preset_3_3" value="preset_3" checked="checked" />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_4"><input type="radio" name="config_bgcolor_preset_3" id="config_bgcolor_preset_3_4" value="preset_4"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_5"><input type="radio" name="config_bgcolor_preset_3" id="config_bgcolor_preset_3_5" value="preset_5"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_6"><input type="radio" name="config_bgcolor_preset_3" id="config_bgcolor_preset_3_6" value="preset_6"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_7"><input type="radio" name="config_bgcolor_preset_3" id="config_bgcolor_preset_3_7" value="preset_7"                   />■</label>
+          </div>
+          <div class="sequence_align">
+            <span>揃え方向: </span>
+            <label><input type="radio" name="config_align_3" id="config_align_3_left"   value="left"                     />←</label>
+            <label><input type="radio" name="config_align_3" id="config_align_3_right"  value="right"  checked="checked" />→</label>
+            <label><input type="radio" name="config_align_3" id="config_align_3_bottom" value="bottom"                   />↓</label>
+            <label><input type="radio" name="config_align_3" id="config_align_3_top"    value="top"                      />↑</label>
+          </div>
+        </div> <!-- sequence -->
+        <div id="sequence_4" class="sequence">
+          <div class="sequence_header">
+            <input type="checkbox" id="sequence_enable_4" class="sequence_enable" checked="checked" /><label for="sequence_enable_4">4番目</label>
+          </div>
+          <div class="sequence_text">
+            <div class="sequence_call">
+              <label>コール: <input type="text" id="config_call_4" value="Sadistic" /></label>
+            </div>
+            <div class="sequence_attribute">
+              <label>属性: <input type="text" id="config_attribute_4" value="Oneesan" /></label>
+            </div>
+            <div class="sequence_name">
+              <label>名前: <input type="text" id="config_name_4" value="Miu Amano" /></label>
+            </div>
+          </div>
+          <div class="sequence_bgcolor">
+            <span>背景色: </span>
+            <label class="config_bgcolor_sample config_bgcolor_sample_1"><input type="radio" name="config_bgcolor_preset_4" id="config_bgcolor_preset_4_1" value="preset_1"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_2"><input type="radio" name="config_bgcolor_preset_4" id="config_bgcolor_preset_4_2" value="preset_2"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_3"><input type="radio" name="config_bgcolor_preset_4" id="config_bgcolor_preset_4_3" value="preset_3"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_4"><input type="radio" name="config_bgcolor_preset_4" id="config_bgcolor_preset_4_4" value="preset_4" checked="checked" />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_5"><input type="radio" name="config_bgcolor_preset_4" id="config_bgcolor_preset_4_5" value="preset_5"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_6"><input type="radio" name="config_bgcolor_preset_4" id="config_bgcolor_preset_4_6" value="preset_6"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_7"><input type="radio" name="config_bgcolor_preset_4" id="config_bgcolor_preset_4_7" value="preset_7"                   />■</label>
+          </div>
+          <div class="sequence_align">
+            <span>揃え方向: </span>
+            <label><input type="radio" name="config_align_4" id="config_align_4_left"   value="left"   checked="checked" />←</label>
+            <label><input type="radio" name="config_align_4" id="config_align_4_right"  value="right"                    />→</label>
+            <label><input type="radio" name="config_align_4" id="config_align_4_bottom" value="bottom"                   />↓</label>
+            <label><input type="radio" name="config_align_4" id="config_align_4_top"    value="top"                      />↑</label>
+          </div>
+        </div> <!-- sequence -->
+        <div id="sequence_5" class="sequence">
+          <div class="sequence_header">
+            <input type="checkbox" id="sequence_enable_5" class="sequence_enable" checked="checked" /><label id="sequence_enable_5">5番目</label>
+          </div>
+          <div class="sequence_text">
+            <div class="sequence_call">
+              <label>コール: <input type="text" id="config_call_5" value="Surprise" /></label>
+            </div>
+            <div class="sequence_attribute">
+              <label>属性: <input type="text" id="config_attribute_5" value="Idol" /></label>
+            </div>
+            <div class="sequence_name">
+              <label>名前: <input type="text" id="config_name_5" value="Hideri Kanzaki" /></label>
+            </div>
+          </div>
+          <div class="sequence_bgcolor">
+            <span>背景色: </span>
+            <label class="config_bgcolor_sample config_bgcolor_sample_1"><input type="radio" name="config_bgcolor_preset_5" id="config_bgcolor_preset_5_1" value="preset_1"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_2"><input type="radio" name="config_bgcolor_preset_5" id="config_bgcolor_preset_5_2" value="preset_2"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_3"><input type="radio" name="config_bgcolor_preset_5" id="config_bgcolor_preset_5_3" value="preset_3"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_4"><input type="radio" name="config_bgcolor_preset_5" id="config_bgcolor_preset_5_4" value="preset_4"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_5"><input type="radio" name="config_bgcolor_preset_5" id="config_bgcolor_preset_5_5" value="preset_5" checked="checked" />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_6"><input type="radio" name="config_bgcolor_preset_5" id="config_bgcolor_preset_5_6" value="preset_6"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_7"><input type="radio" name="config_bgcolor_preset_5" id="config_bgcolor_preset_5_7" value="preset_7"                   />■</label>
+          </div>
+          <div class="sequence_align">
+            <span>揃え方向: </span>
+            <label><input type="radio" name="config_align_5" id="config_align_5_left"   value="left"                     />←</label>
+            <label><input type="radio" name="config_align_5" id="config_align_5_right"  value="right"                    />→</label>
+            <label><input type="radio" name="config_align_5" id="config_align_5_bottom" value="bottom" checked="checked" />↓</label>
+            <label><input type="radio" name="config_align_5" id="config_align_5_top"    value="top"                      />↑</label>
+          </div>
+        </div> <!-- sequence -->
+        <div id="sequence_6" class="sequence">
+          <div class="sequence_header">
+            <input type="checkbox" id="sequence_enable_6" class="sequence_enable" checked="checked" /><label id="sequence_enable_6">6番目</label>
+          </div>
+          <div class="sequence_text">
+            <div class="sequence_call">
+              <label>コール: <input type="text" id="config_call_6" value="Service" /></label>
+            </div>
+            <div class="sequence_attribute">
+              <label>属性: <input type="text" id="config_attribute_6" value="" /></label>
+            </div>
+            <div class="sequence_name">
+              <label>名前: <input type="text" id="config_name_6" value="" /></label>
+            </div>
+          </div>
+          <div class="sequence_bgcolor">
+            <span>背景色: </span>
+            <input type="radio" name="config_bgcolor_preset_6" id="config_bgcolor_preset_6_1" value="preset_1"                   /><label for="config_bgcolor_preset_6_1" class="config_bgcolor_sample config_bgcolor_sample_1">■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_2"><input type="radio" name="config_bgcolor_preset_6" id="config_bgcolor_preset_6_2" value="preset_2"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_3"><input type="radio" name="config_bgcolor_preset_6" id="config_bgcolor_preset_6_3" value="preset_3"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_4"><input type="radio" name="config_bgcolor_preset_6" id="config_bgcolor_preset_6_4" value="preset_4"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_5"><input type="radio" name="config_bgcolor_preset_6" id="config_bgcolor_preset_6_5" value="preset_5"                   />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_6"><input type="radio" name="config_bgcolor_preset_6" id="config_bgcolor_preset_6_6" value="preset_6" checked="checked" />■</label>
+            <label class="config_bgcolor_sample config_bgcolor_sample_7"><input type="radio" name="config_bgcolor_preset_6" id="config_bgcolor_preset_6_7" value="preset_7"                   />■</label>
+          </div>
+          <div class="sequence_align">
+            <span>揃え方向: </span>
+            <label><input type="radio" name="config_align_6" id="config_align_6_left"   value="left"                     />←</label>
+            <label><input type="radio" name="config_align_6" id="config_align_6_right"  value="right"                    />→</label>
+            <label><input type="radio" name="config_align_6" id="config_align_6_bottom" value="bottom"                   />↓</label>
+            <label><input type="radio" name="config_align_6" id="config_align_6_top"    value="top"    checked="checked" />↑</label>
+          </div>
+        </div> <!-- sequence -->
+      </div> <!-- config_area -->
+      <p>現時点ではInternet Explorerではダウンロードできません</p>
+      <div id="author">
+        <span>作成者：びるず(<a href="https://twitter.com/billstw" target="_blank">twitter:@billstw</a>)</span>
+      </div>
+    </div> <!-- content_area -->
+  </body>
+</html>
