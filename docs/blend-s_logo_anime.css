@@ -1,10 +1,25 @@
-﻿@import url('https://fonts.googleapis.com/css?family=Questrial');
+﻿/*
+ * 「ブレンド・S」オープニング風ロゴアニメーションジェネレータ
+ * Copyright (c) 2017 bills-appworks
+ * This software is released under the MIT License.
+ * http://opensource.org/licenses/mit-license.php
+ */
+/*
+ * 使用しているスタイル指定技巧の多くはオライリー刊「CSSシークレット」を参考
+ */
+/* Webフォント利用 - Google Fonts */
+/* アニメーション描画部 */
+@import url('https://fonts.googleapis.com/css?family=Questrial');
+/* タイトルの"S" */
 @import url('https://fonts.googleapis.com/css?family=Fredoka One');
+/* タブ風表示の"CAFÉ STILE" */
 @import url('https://fonts.googleapis.com/css?family=Plaster');
 /*
 @import url('https://fonts.googleapis.com/css?family=Allerta Stencil');
 @import url('https://fonts.googleapis.com/css?family=Press Start 2P');
 */
+
+/* TODO: 全般的にスタイル指定要整理 */
 
 html, body {
   margin: 0;
@@ -16,11 +31,14 @@ body {
   font-family: "ヒラギノ丸ゴ Pro W4","ヒラギノ丸ゴ Pro","Hiragino Maru Gothic Pro","ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","Meiryo";
 }
 
+/* タイトルおよび直下の説明文をインデント */
 #body_title, #description {
   margin-left: 50px;
 }
 
+/* "ブレンド・S"全体 */
 #body_title {
+  /* "S"周囲の疑似円周の分+αを上下空ける */
   margin-top: calc( 2px + 10px + 12px + 6px );
   margin-bottom: calc( 2px + 10px + 12px + 6px );
   margin-left: 50px;
@@ -29,11 +47,13 @@ body {
   vertical-align: middle;
   font-size: xx-large;
   color: rgb(67, 27, 7);
+  /* タイトル領域内容は横並び */
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
+/* "ブレンド・"と"S"共通 */
 #title_blend, #title_S {
   height: 1.2em;
   vertical-align: middle;
@@ -41,7 +61,9 @@ body {
   margin-bottom: auto;
 }
 
+/* "S" */
 #title_S {
+  /* "S"周囲の疑似円周の分を空ける TODO:調整 */
   margin-left: calc( ( 2px + 10px + 12px ) / 2);
   position: relative;
   width: 1.2em;
@@ -49,12 +71,21 @@ body {
   font-family: "Fredoka One";
   color: rgb(255, 255, 255);
   background-color: rgb(67, 27, 7);
+  /* 周囲を矩形ではなく円状に */
   border-radius: 1000px;
+  /*
+   * 影のぼかしを無くして疑似的な3重線
+   * 前の段ほど前景側に表示される（後段は前段に隠れる）
+   * 1段目：円の中心から見て背景色の端を始点として2px
+   * 2段目：円の中心から見て背景色の端を始点として10px（見た目は10 - 2 = 8px）
+   * 3段目：円の中心から見て背景色の端を始点として12px（見た目は12 -10 = 2px）
+   */
   box-shadow: 0 0 0   2px rgb(255, 255, 255),
               0 0 0  10px rgb(255,  77, 117),
               0 0 0  12px rgb( 67,  27,   7);
 }
 
+/* "S"にオーバーレイする縦線 */
 #title_S_vertical {
   position: absolute;
   height: 100%;
@@ -63,11 +94,12 @@ body {
   background-color: rgb(67, 27, 7);
 }
 
+/* タイトル下部の説明文字列 */
 #description {
   font-size: medium;
 }
 
-/* tab style from CSS SECRETS */
+/* タブインデックス風装飾表示 */
 #tab {
   position: relative;
   z-index: 1;
@@ -99,6 +131,7 @@ body {
   transform-origin: bottom;
 }
 
+/* CAFÉ STILE */
 #tab .tab_element:nth-child(1) {
   color: rgb(67, 27, 7);
   font-family: "Plaster";
@@ -109,7 +142,9 @@ body {
   border-color: rgb(67, 27, 7);
 }
 
+/* ☑SADISTIC */
 #tab .tab_element:nth-child(2) {
+  /* 初期状態で最も手前に表示 */
   z-index: 2;
   color: rgb(255, 173, 215);
 }
@@ -120,6 +155,7 @@ body {
   margin-bottom: -.11em;
 }
 
+/* ☑TSUNDERE */
 #tab .tab_element:nth-child(3) {
   color: rgb(96, 255, 255);
 }
@@ -129,6 +165,7 @@ body {
   border-color: rgb(0, 190, 239);
 }
 
+/* ☑IMOUTO */
 #tab .tab_element:nth-child(4) {
   color: rgb(255, 255, 96);
 }
@@ -138,6 +175,7 @@ body {
   border-color: rgb(239, 207, 0);
 }
 
+/* ☑ONEESAN */
 #tab .tab_element:nth-child(5) {
   color: rgb(255, 147, 255);
 }
@@ -147,6 +185,7 @@ body {
   border-color: rgb(167, 35, 192);
 }
 
+/* ☑IDOL */
 #tab .tab_element:nth-child(6) {
   color: rgb(129, 255, 245);
 }
@@ -156,23 +195,27 @@ body {
   border-color: rgb(17, 191, 133);
 }
 
+/* コンテンツ領域 */
 #content_area {
   background-color: rgb(255, 77, 117);
   margin: 0 0 40px 0;
   border-color: rgb(239, 61, 101);
-
   padding: 20px;
   color: rgba(255, 255, 255, 0.7);
+  /* コンテンツ領域直下は縦並び */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* レンダリング性能(FPS)確認表示（非表示） */
 #rendering_performance {
   display: none;
 }
 
+/* アニメーション描画 */
 #rendering_canvas {
+  /* 16:9 */
   width: 480px;
   height: 270px;
   border-style: solid;
@@ -181,10 +224,11 @@ body {
   border-radius: 2px;
 }
 
+/* 描画サイズ計測用（非表示） */
 #measure_canvas {
 /*
   display: none;
-  では描画内容の取得が意図通りにされない場合があるため
+  では描画内容の計測が意図通りにされない場合があるため
 　visibility: hidden; position abosolute;
   で代替。
 */
@@ -192,6 +236,7 @@ body {
   position: absolute;
 }
 
+/* 利用者操作ボタン共通 */
 button {
   padding: .3em .8em;
   border: 1px solid rgba(0, 32, 0, 0.2);
@@ -203,7 +248,9 @@ button {
   white-space: nowrap;
 }
 
+/* チェックボックス共通 */
 input[type="checkbox"] + label::before {
+  /* 標準のチェックボックス描画を隠して装飾したものを表示 */
   content: '\a0';
   display: inline-block;
   vertical-align: .2em;
@@ -217,41 +264,50 @@ input[type="checkbox"] + label::before {
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* チェックボックスのチェック時 */
 input[type="checkbox"]:checked + label::before {
   content: '\2713';
 }
 
+/* チェックボックスのフォーカス取得時 */
 input[type="checkbox"]:focus + label::before {
   box-shadow: 0 0 0 1px rgb( 67,  27,   7);
 }
 
+/* チェックボックスの無効時 */
 input[type="checkbox"]:disabled + label::before {
   box-shadow: 0 0 0 1px rgba(128, 128, 128, 0.7);
 }
 
+/* チェックボックス共通 */
 input[type="checkbox"] {
   position: absolute;
   clip: rect(0, 0, 0, 0);
 }
 
+/* "時間優先"チェックボックスのラベル部 */
 label[for="animation_priority_time"] {
   color: gray;
 }
 
+/* "アニメーション"ボタン */
 #operation_animate {
   margin-right: 1em;
 }
 
+/* "アニメーションGIF録画＆ダウンロード"ボタン */
 #operation_download {
   margin-left: 2em;
 }
 
+/* 元ネタでいうキャラクターごとの表示内容設定 */
 .sequence {
   margin: 1em auto;
   padding: 1em 1em;
   border-radius: 2px;
 }
 
+/* 表示内容設定の周囲枠 */
 .sequence:nth-child(1) {
   box-shadow: 0 0 0   1px rgba(255, 255, 255, 0.7),
               0 0 0   3px rgb(255,  77, 117),
@@ -288,6 +344,7 @@ label[for="animation_priority_time"] {
               0 0 0   4px rgba(255, 255, 255, 0.7);
 }
 
+/* "コール" "属性" "名前"のテキスト部 */
 .sequence_text {
   display: flex;
 }
@@ -296,16 +353,19 @@ label[for="animation_priority_time"] {
   margin: auto 1em auto 0;
 }
 
+/* テキスト入力共通 */
 input[type="text"] {
   background-color: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.7);
   border: 1px dashed rgba(255, 255, 255, 0.7);
 }
 
+/* 背景色 */
 .config_bgcolor_sample {
   width: 10px;
   height: 10px;
   font-size: 16pt;
+  /* UI全体背景色と選択対象の背景色が同系統で埋没するのを防ぐための疑似枠描画 */
   text-shadow: rgba(255, 255, 255, 0.7) -1px -1px  0px,
                rgba(255, 255, 255, 0.7)  1px -1px  0px,
                rgba(255, 255, 255, 0.7) -1px  1px  0px,
@@ -340,12 +400,17 @@ input[type="text"] {
   color: rgb(100, 196, 22);
 }
 
+/*
+ * ブラウザ表示領域幅:800px以下の場合の調整
+ */
 @media (max-width: 800px) {
 
+/* 2番目タグインデックスの文字表示を疑似的に消す */
 .tab_element:nth-child(2) {
   color: rgba(255, 255, 255, 0) !important;
 }
 
+/* 3番目以降のタブインデックスは非表示 */
 .tab_element:nth-child(3),
 .tab_element:nth-child(4),
 .tab_element:nth-child(5),
@@ -353,6 +418,7 @@ input[type="text"] {
   display: none !important;
 }
 
+/* テキスト入力系は縦並び表示 */
 .sequence_text {
   display: table;
 }
@@ -369,20 +435,27 @@ input[type="text"] {
 
 } /* @media (max-width: 800px) */
 
+/*
+ * ブラウザ表示領域幅:600px以下の場合の調整
+ */
 @media (max-width: 600px) {
 
+/* タイトルおよび直下の説明文インデント縮小 */
 #body_title, #description {
   margin-left: 20px;
 }
 
+/* タブインデックス風表示のインデント縮小 */
 #tab {
   margin: 20px auto 0px 20px;
 }
 
+/* コンテンツ領域の余白縮小 */
 #content_area {
   padding: 10px
 }
 
+/* 利用者操作UI領域の各要素を縦並び */
 #operation_area {
   display: flex;
   flex-direction: column;
@@ -404,8 +477,13 @@ input[type="text"] {
 
 } /* @media (max-width: 600px) */
 
+/*
+ * ブラウザ表示領域幅:484px以下の場合の調整
+ * （アニメーション描画領域デフォルトサイズ+枠の幅限界）
+ */
 @media (max-width: 484px) {
 
+/* アニメーション描画領域のサイズを動的に調整 */
 #rendering_canvas {
   width: calc(100vw - 2px * 2);
   height: calc( ( 100vw - 2px * 2 ) * 9 / 16 );

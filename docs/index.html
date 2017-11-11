@@ -3,7 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>「ブレンド・S」オープニング風ロゴアニメーションジェネレータ（αプレビュー版）</title>
+    <title>「ブレンド・S」オープニング風ロゴアニメーションジェネレータ（α版）</title>
+    <!--
+      Copyright (c) 2017 bills-appworks
+      This software is released under the MIT License.
+      http://opensource.org/licenses/mit-license.php
+    -->
     <link rel="stylesheet" href="blend-s_logo_anime.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
@@ -35,7 +40,8 @@
   </head>
   <body>
     <div id="body_title"><div id="title_blend">ブレンド・</div><div id="title_S">S<span id="title_S_vertical"></span></div></div>
-    <div id="description">オープニング風ロゴアニメーションジェネレータ（αプレビュー版）</div>
+    <div id="description">オープニング風ロゴアニメーションジェネレータ（α版）</div>
+    <!-- タブインデックス風装飾表示 -->
     <div id="tab">
       <span class="tab_element">CAFÉ STILE</span>
       <span class="tab_element"><span class="tab_checkbox">☑</span>SADISTIC </span>
@@ -44,12 +50,18 @@
       <span class="tab_element"><span class="tab_checkbox">☑</span>ONEESAN </span>
       <span class="tab_element"><span class="tab_checkbox">☑</span>IDOL </span>
     </div>
+    <!-- コンテンツ領域 -->
     <div id="content_area">
+      <!-- レンダリング領域 -->
       <div id="rendering_area">
-        <p id="rendering_performance">Rendering (目標: <span id="target_fps">--</span> fps / 実効: <span id="effective_fps">--</span> fps)</p>
+          <!-- レンダリング性能(FPS)確認表示（非表示） -->
+          <p id="rendering_performance">Rendering (目標: <span id="target_fps">--</span> fps / 実効: <span id="effective_fps">--</span> fps)</p>
+        <!-- アニメーション描画 -->
         <canvas id="rendering_canvas"></canvas>
+        <!-- 描画サイズ計測用（非表示） -->
         <canvas id="measure_canvas"></canvas>
       </div>
+      <!-- 利用者操作UI領域 -->
       <div id="operation_area">
         <span>
           <button id="operation_animate">アニメーション</button>
@@ -59,7 +71,9 @@
           <button id="operation_download">アニメーションGIF録画＆ダウンロード</button>
         </span>
       </div>
+      <!-- 表示内容設定UI領域 -->
       <div id="config_area">
+        <!-- その1 -->
         <div id="sequence_1" class="sequence">
           <div class="sequence_header">
             <input type="checkbox" id="sequence_enable_1" class="sequence_enable" checked="checked" /><label for="sequence_enable_1">1番目</label>
@@ -92,7 +106,8 @@
             <input type="radio" name="config_align_1" id="config_align_1_bottom" value="bottom"                   /><label for="config_align_1_bottom" >↓</label>
             <input type="radio" name="config_align_1" id="config_align_1_top"    value="top"                      /><label for="config_align_1_top"    >↑</label>
           </div>
-        </div> <!-- sequence -->
+        </div>
+        <!-- その2 -->
         <div id="sequence_2" class="sequence">
           <div class="sequence_header">
             <input type="checkbox" id="sequence_enable_2" class="sequence_enable" checked="checked" /><label for="sequence_enable_2">2番目</label>
@@ -125,7 +140,8 @@
             <label><input type="radio" name="config_align_2" id="config_align_2_bottom" value="bottom"                   />↓</label>
             <label><input type="radio" name="config_align_2" id="config_align_2_top"    value="top"                      />↑</label>
           </div>
-        </div> <!-- sequence -->
+        </div>
+        <!-- その3 -->
         <div id="sequence_3" class="sequence">
           <div class="sequence_header">
             <input type="checkbox" id="sequence_enable_3" class="sequence_enable" checked="checked" /><label for="sequence_enable_3">3番目</label>
@@ -158,7 +174,8 @@
             <label><input type="radio" name="config_align_3" id="config_align_3_bottom" value="bottom"                   />↓</label>
             <label><input type="radio" name="config_align_3" id="config_align_3_top"    value="top"                      />↑</label>
           </div>
-        </div> <!-- sequence -->
+        </div>
+        <!-- その4 -->
         <div id="sequence_4" class="sequence">
           <div class="sequence_header">
             <input type="checkbox" id="sequence_enable_4" class="sequence_enable" checked="checked" /><label for="sequence_enable_4">4番目</label>
@@ -191,7 +208,8 @@
             <label><input type="radio" name="config_align_4" id="config_align_4_bottom" value="bottom"                   />↓</label>
             <label><input type="radio" name="config_align_4" id="config_align_4_top"    value="top"                      />↑</label>
           </div>
-        </div> <!-- sequence -->
+        </div>
+        <!-- その5 -->
         <div id="sequence_5" class="sequence">
           <div class="sequence_header">
             <input type="checkbox" id="sequence_enable_5" class="sequence_enable" checked="checked" /><label id="sequence_enable_5">5番目</label>
@@ -224,7 +242,8 @@
             <label><input type="radio" name="config_align_5" id="config_align_5_bottom" value="bottom" checked="checked" />↓</label>
             <label><input type="radio" name="config_align_5" id="config_align_5_top"    value="top"                      />↑</label>
           </div>
-        </div> <!-- sequence -->
+        </div>
+        <!-- その6 -->
         <div id="sequence_6" class="sequence">
           <div class="sequence_header">
             <input type="checkbox" id="sequence_enable_6" class="sequence_enable" checked="checked" /><label id="sequence_enable_6">6番目</label>
@@ -257,11 +276,17 @@
             <label><input type="radio" name="config_align_6" id="config_align_6_bottom" value="bottom"                   />↓</label>
             <label><input type="radio" name="config_align_6" id="config_align_6_top"    value="top"    checked="checked" />↑</label>
           </div>
-        </div> <!-- sequence -->
+        </div>
       </div> <!-- config_area -->
       <p>現時点ではInternet Explorerではダウンロードできません</p>
       <div id="author">
         <span>作成者：びるず(<a href="https://twitter.com/billstw" target="_blank">twitter:@billstw</a>)</span>
+      </div>
+      <div id="copyright">
+        <span>Copyright (c) 2017 bills-appworks</span>
+      </div>
+      <div id="license">
+        <span>This software is released under the <a href="http://opensource.org/licenses/mit-license.php" target="_blank">MIT License </a>.</span>
       </div>
     </div> <!-- content_area -->
   </body>
