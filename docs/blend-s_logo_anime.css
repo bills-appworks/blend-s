@@ -290,6 +290,44 @@ label[for="animation_priority_time"] {
   color: gray;
 }
 
+/* ラジオボタン共通 */
+input[type="radio"] + label::before {
+  /* 標準のラジオボタン描画を隠して装飾したものを表示 */
+  content: '〇';
+  display: inline-block;
+  vertical-align: center;
+  width: .8em;
+  height: .8em;
+  font-size: initial;
+  margin-right: .5em;
+  background: rgba(255, 255, 255, 0);
+  text-indent: .15em;
+  line-height: .65;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: initial;
+}
+
+/* ラジオボタンの選択時 */
+input[type="radio"]:checked + label::before {
+  content: '◉';
+}
+
+/* ラジオボタンのフォーカス取得時 */
+input[type="radio"]:focus + label::before {
+  color: rgba(255, 255, 255, 1.0);
+}
+
+/* ラジオボタンの無効時 */
+input[type="radio"]:disabled + label::before {
+  color: rgba(128, 128, 128, 0.7);
+}
+
+/* ラジオボタン共通 */
+input[type="radio"] {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+}
+
 /* "アニメーション"ボタン */
 #operation_animate {
   margin-right: 1em;
