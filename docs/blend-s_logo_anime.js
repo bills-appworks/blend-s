@@ -20,7 +20,7 @@ $(function() {
   var animation_definition_json = function(){/*
     {
       "//rendering_fps": "画面上レンダリング目標FPS",
-      "rendering_fps": 30,
+      "rendering_fps": 24,
 
       "//gif_rendering_fps": "GIFアニメーションFPS",
       "gif_rendering_fps": 24,
