@@ -636,12 +636,12 @@ $(function() {
   }
 
   /**
-   * jsgif download()がFirefoxでは動作しないので下記を参考に回避
+   * jsgif download()がFirefox/IEでは動作しないので下記を参考に回避
    * https://stackoverflow.com/questions/32225904/programmatical-click-on-a-tag-not-working-in-firefox
    * ダウンロード用ダミーa要素をdocumentに紐づけ
    * @param {string} filename 利用者に提示するファイル名
    */
-  function download_altanative(filename) {
+  function download_alternative(filename) {
     // エンコーディングされたGIF chunkを参照
     var out = animation_context.gif_encoder.stream();
     // オリジナルメソッドのエラー処理は省略
@@ -649,9 +649,19 @@ $(function() {
     document.body.appendChild(templink); // オリジナルに追加
     templink.setAttribute("type", "hidden"); // オリジナルに追加
     templink.download=filename;
-    templink.href= URL.createObjectURL(new Blob([new Uint8Array(out.bin)], {type : "image/gif" } ));
+    templink.href= URL.createObjectURL(new Blob([new Uint8Array(out.bin)], {type : "image/gif" }));
     templink.click();
     document.body.removeChild(templink); // オリジナルに追加
+  }
+
+  /**
+   * jsgif download()がFirefox/IEでは動作しないのでFileSaverを利用
+   * @param {string} filename 利用者に提示するファイル名
+   */
+  function download_alternative_FileSaver(filename) {
+    // エンコーディングされたGIF chunkを参照
+    var out = animation_context.gif_encoder.stream();
+    saveAs(new Blob([new Uint8Array(out.bin)], {type : "image/gif" }), filename);
   }
 
   /**
@@ -1066,8 +1076,8 @@ $(function() {
    */
   $('#operation_download').on('click', function() {
     animation_context.gif_encoder = new GIFEncoder();
-    // Firefoxでdownload()メソッドが動作しないため代替
-    animation_context.gif_encoder.download = download_altanative;
+    // Firefox/IEでdownload()メソッドが動作しないため代替
+    animation_context.gif_encoder.download = download_alternative_FileSaver;
     // 負数は無視されるが繰り返し無しを明確化のため指定
     animation_context.gif_encoder.setRepeat(-1);
     // 描画速度(FPS)を指定
