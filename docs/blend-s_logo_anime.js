@@ -42,6 +42,15 @@ $(function() {
         "name":               "normal normal 100  13pt Questrial"
       },
 
+      "//font_small": "小画面用フォント（暫定対応） threshold:判定canvas幅ピクセル閾値",
+      "font_small": {
+        "threshold": 400,
+        "call_capital":       "normal normal 400  75pt Questrial",
+        "call_non_capital":   "normal normal 100  45pt Questrial",
+        "attribute":          "normal normal 100  22pt Questrial",
+        "name":               "normal normal 100  10pt Questrial"
+      },
+
       "//text_width_ratio": "文字列幅のフォント標準に対する比率",
       "text_width_ratio": {
         "call_capital":     0.9,
@@ -934,6 +943,11 @@ $(function() {
     animation_context.rendering_canvas.attr('height', rendering_canvas_height);
     animation_context.rendering_canvas_width = rendering_canvas_width;
     animation_context.rendering_canvas_height = rendering_canvas_height;
+    
+    // 画面サイズが小さい場合にフォントを小さくする（暫定対応）
+    if (rendering_canvas_width < animation_definition.font_small.threshold) {
+      animation_definition.font = animation_definition.font_small;
+    }
 
     // シーケンス関連状態管理初期化
     initialize_animation_context_sequence_start();

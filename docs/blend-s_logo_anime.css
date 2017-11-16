@@ -396,6 +396,7 @@ input[type="text"] {
   background-color: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.7);
   border: 1px dashed rgba(255, 255, 255, 0.7);
+  font-size: larger;
 }
 
 /* 背景色 */
@@ -456,19 +457,59 @@ input[type="text"] {
   display: none !important;
 }
 
+/* 利用者操作UI領域の各要素を縦並び */
+#operation_area {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#operation_area > * {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+
+#operation_animate {
+  margin-right: auto;
+}
+
+#operation_download {
+  margin-left: auto;
+}
+
+button {
+  margin: 0.2em auto;
+  padding: 0.5em 0.8em;
+  font-size: larger;
+}
+
+input[type="checkbox"] + label::before {
+  margin-left: 1em;
+}
+
 /* テキスト入力系は縦並び表示 */
-.sequence_text {
+.sequence_text, .sequence_bgcolor, sequence_align {
   display: table;
 }
 
-.sequence_text > div {
+.sequence_text > div, .sequence_bgcolor > div, .sequence_align > div {
   display: table-row;
 }
 
-.sequence_text > div > * {
+.sequence_text > div > *, .sequence_bgcolor > div > *, .sequence_align > div > * {
   display: table-cell;
   padding-left: 4px;
   padding-right: 4px;
+}
+
+.sequence_text > div > span:nth-child(1),
+.sequence_bgcolor > div > span:nth-child(1),
+.sequence_align > div > span:nth-child(1) {
+  white-space: nowrap;
+}
+
+input[type="text"] {
+  margin: 0.2em auto 0.8em;
 }
 
 } /* @media (max-width: 800px) */
@@ -490,27 +531,7 @@ input[type="text"] {
 
 /* コンテンツ領域の余白縮小 */
 #content_area {
-  padding: 10px
-}
-
-/* 利用者操作UI領域の各要素を縦並び */
-#operation_area {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-#operation_area > * {
-  margin-top: 0.2em;
-  margin-bottom: 0.2em;
-}
-
-#operation_animate {
-  margin-right: auto;
-}
-
-#operation_download {
-  margin-left: auto;
+  padding: 0px;
 }
 
 } /* @media (max-width: 600px) */
@@ -521,6 +542,15 @@ input[type="text"] {
  */
 @media (max-width: 484px) {
 
+/* タイトル下説明を縦並び */
+#description {
+  display: table;
+}
+
+#description > span {
+  display: table-row;
+}
+  
 /* アニメーション描画領域のサイズを動的に調整 */
 #rendering_canvas {
   width: calc(100vw - 2px * 2);
@@ -528,3 +558,28 @@ input[type="text"] {
 }
 
 } /* @media (max-width: 484px) */
+
+/*
+ * ブラウザ表示領域幅:400px以下の場合の調整
+ */
+@media (max-width: 400px) {
+
+/* ダウンロードボタン内テキストを縦並び */
+#operation_download {
+  display: table;
+}
+
+#operation_download > span {
+  display: table-row;
+}
+
+/* テキストのラベルと入力欄を縦並び */
+.sequence_text > div {
+  display: table;
+}
+
+.sequence_text > div > * {
+  display: table-row;
+}
+
+}  
