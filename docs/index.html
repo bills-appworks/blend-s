@@ -55,12 +55,18 @@
     <div id="content_area">
       <!-- レンダリング領域 -->
       <div id="rendering_area">
+        <div>
           <!-- レンダリング性能(FPS)確認表示（非表示） -->
           <p id="rendering_performance">Rendering (目標: <span id="target_fps">--</span> fps / 実効: <span id="effective_fps">--</span> fps)</p>
-        <!-- アニメーション描画 -->
-        <canvas id="rendering_canvas"></canvas>
-        <!-- 描画サイズ計測用（非表示） -->
-        <canvas id="measure_canvas"></canvas>
+        </div>
+        <div>
+          <!-- アニメーション描画 -->
+          <canvas id="rendering_canvas"></canvas>
+        </div>
+        <div>
+          <!-- 描画サイズ計測用（非表示） -->
+          <canvas id="measure_canvas"></canvas>
+        </div>
       </div>
       <!-- 利用者操作UI領域 -->
       <div id="operation_area">
