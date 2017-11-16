@@ -680,7 +680,7 @@ $(function() {
     // ・全アニメーションフレームが終了していない
     // ・目標FPSとなる前フレーム処理からの時間経過
     if (animation_context.frame_index < animation_definition.total_frames) {
-      if (time - animation_context.previous_animate_time > 1000 / animation_definition.rendering_fps) {
+      if (animation_context.gif_encoder || (time - animation_context.previous_animate_time > 1000 / animation_definition.rendering_fps)) {
         animation_context.previous_animate_time = time;
         // 背景色でクリアし、各要素を描画
         animation_frame_clear();
