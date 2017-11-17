@@ -135,6 +135,8 @@ body {
 #tab .tab_element:nth-child(1) {
   color: rgb(67, 27, 7);
   font-family: "Plaster";
+  /* 他のフォントとメトリクスが異なるため高さを補正 */
+  height: 1.4em;
 }
 
 #tab .tab_element:nth-child(1)::before {
