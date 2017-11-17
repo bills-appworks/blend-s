@@ -441,6 +441,18 @@ input[type="text"] {
   color: rgb(100, 196, 22);
 }
 
+#thanks a {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+#author a, #thanks a, #copyright a, #license a {
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6),
+               -1px 1px 1px rgba(255, 255, 255, 0.6),
+               -1px -1px 1px rgba(255, 255, 255, 0.6),
+               1px -1px 1px rgba(255, 255, 255, 0.6);
+}
+
 /*
  * ブラウザ表示領域幅:800px以下の場合の調整
  */
