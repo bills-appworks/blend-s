@@ -38,8 +38,21 @@
     <meta name="twitter:image" content="https://bills-appworks.github.io/blend-s/share_image.png">
     <meta name="twitter:image:alt" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ">
     <script src="google_analytics.js"></script>
+    <!-- Google+ -->
+    <script src="https://apis.google.com/js/platform.js" async defer>
+      {lang: 'ja'}
+    </script>
   </head>
   <body>
+    <!-- Facebook -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.9";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
     <div id="body_title"><div id="title_blend">ブレンド・</div><div id="title_S">S<span id="title_S_vertical"></span></div></div>
     <div id="description"><span>オープニング風ロゴアニメーション</span><span>ジェネレータ（α-3版）</span></div>
     <!-- タブインデックス風装飾表示 -->
@@ -333,6 +346,15 @@
           </div>
         </div>
       </div> <!-- config_area -->
+      <hr />
+      <div id="share">
+        <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <div class="fb-share-button" data-layout="button" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u&amp;src=sdkpreparse">シェア</a></div>
+        <div class="g-plus" data-action="share" data-annotation="none"></div>
+        <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+        <div class="line-it-button shareln" style="display: none;" data-lang="ja" data-type="share-a"></div><script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+      </div>
+      <hr />
       <div id="author">
         <span>作成者：びるず(<a href="https://twitter.com/billstw" target="_blank">twitter:@billstw</a>)</span>
       </div>
