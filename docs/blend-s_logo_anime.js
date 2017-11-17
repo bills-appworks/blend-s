@@ -1103,6 +1103,40 @@ $(function() {
     animate_ignite();
   });
 
-  // 画面ロード時にアニメーション起動（デモンストレーション）
+  /**
+   * SNSシェア関連初期化
+   */
+  function initializeShare() {
+    var text, url, href;
+    text = document.title;
+    url = document.URL.replace(/\/[^/]*$/, '/');
+
+    // Open Graph Protocol (OGP)
+      // Twitter Cardは後からメタ情報をJavascriptで生成してもNG
+    
+    // Twitter
+      // NOP
+
+    // Facebook
+      // NOP
+
+    // Google+
+      // NOP
+
+    // はてなブックマーク
+      // NOP
+
+    // LINE
+    $('.shareln').data("url", encodeURI(url));
+    if (typeof(LineIt) !== "undefined") {
+      // 「LINEで送る」ボタン有効化
+      LineIt.loadButton();
+    }
+  }
+
+  // 画面ロード時初回実行
+  // SNSシェア関連初期化
+  initializeShare();
+  // アニメーション起動（デモンストレーション）
   animate_ignite();
 });
