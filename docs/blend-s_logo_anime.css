@@ -394,7 +394,7 @@ input[type="radio"] {
 }
 
 /* テキスト入力共通 */
-input[type="text"] {
+.sequence_text input[type="text"] {
   background-color: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.7);
   border: 1px dashed rgba(255, 255, 255, 0.7);
