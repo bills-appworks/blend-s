@@ -25,6 +25,9 @@ $(function() {
       "//gif_rendering_fps": "GIFアニメーションFPS",
       "gif_rendering_fps": 24,
 
+      "//default_sequence_number": "シーケンス数（デフォルト）",
+      "default_sequence_number": 6,
+
       "//total_frames": "1シーケンスのフレーム数",
       "total_frames": 20,
 
@@ -129,6 +132,45 @@ $(function() {
         "preset_5": "rgb( 33, 207, 149)",
         "preset_6": "rgb(200, 226,   5)",
         "preset_7": "rgb(100, 196,  22)"
+      },
+
+      "//bg_style_separate": "プリセット背景色(RGB値分割)",
+      "bg_style_separate": {
+        "preset_1": {
+          "r": 255,
+          "g":  77,
+          "b": 117
+        },
+        "preset_2": {
+          "r":   0,
+          "g": 206,
+          "b": 255
+        },
+        "preset_3": {
+          "r": 255,
+          "g": 223,
+          "b":   0
+        },
+        "preset_4": {
+          "r": 183,
+          "g":  51,
+          "b": 208
+        },
+        "preset_5": {
+          "r":  33,
+          "g": 207,
+          "b": 149
+        },
+        "preset_6": {
+          "r": 200,
+          "g": 226,
+          "b":   5
+        },
+        "preset_7": {
+          "r": 100,
+          "g": 196,
+          "b":  22
+        }
       },
 
       "//fg_color": "文字列デフォルト表示色",
@@ -910,6 +952,20 @@ $(function() {
   }
 
   /**
+   * 指定したRGB各値に対応するRGB16進文字列(#FFFFFF)を取得
+   * @param {number} r RGB値のR
+   * @param {number} g RGB値のG
+   * @param {number} b RGB値のB
+   * @return {string} '#FFFFFF'形式のRGB値表現文字列
+   */
+  function getHexRGB(r, g, b) {
+    return '#'
+      + ('0' + r.toString(16).toUpperCase()).slice(-2)
+      + ('0' + g.toString(16).toUpperCase()).slice(-2)
+      + ('0' + b.toString(16).toUpperCase()).slice(-2);
+  }
+
+  /**
    * アニメーション状態管理初期化：シーケンス起動時
    */
   function initialize_animation_context_sequence_start() {
@@ -981,7 +1037,7 @@ $(function() {
     animation_config.text.name = $('#config_name_' + target).val();
 
     // 背景色
-    var value = $('input[name="config_bgcolor_preset_' +target + '"]:checked').val();
+    var value = $('input[name="config_bgcolor_' + target + '"]:checked').val();
     var bg_style;
     switch(value) {
     case 'preset_1':
@@ -1004,6 +1060,9 @@ $(function() {
       break;
     case 'preset_7':
       bg_style = animation_definition.bg_style.preset_7;
+      break;
+    case 'variable':
+      bg_style = $('#config_bgcolor_variable_' + target).val();
       break;
     }
     animation_context.bg_style = bg_style;
@@ -1104,6 +1163,64 @@ $(function() {
   });
 
   /**
+   * Color pickerに対応するラジオボタンを選択
+   * @param {Object} color_picker_element Color Picker要素
+   */
+  function selectColorPickerRadio(color_picker_element) {
+    // color picker要素に対応するラジオボタンnameをdata-radio属性から取得
+    var radio = $(color_picker_element).attr('data-radio')
+    // 指定したnameのラジオボタン群のcolor picker項目を選択
+    $('input[name=' + radio + ']').val(['variable']);
+  }
+
+  /**
+   * Color pickerクリックハンドラ（HTML5ネイティブ）
+   */
+  $('.config_bgcolor_variable').on('click', function() {
+    // color pickerに対応するラジオボタンを選択
+    selectColorPickerRadio(this);
+  });
+
+  /**
+   * Color pickerクリックハンドラ（spectrumによる置き換え要素）
+   */
+  $('.config_bgcolor_variable').on('beforeShow.spectrum', function(e, tinycolor) {
+    // color pickerに対応するラジオボタンを選択
+    selectColorPickerRadio(this);
+  });
+
+  /**
+   * Color picker（任意色選択）初期化
+   * 実装時点ではIEおよびiOS SafariがHTML5 color pickerに対応していないため
+   * spectrumライブラリを併用
+   * できるだけHTML5ネイティブを利用する
+   */
+  function initializeColorPicker() {
+    // 背景色のRGB値分離定義への参照ショートカット
+    var config = animation_definition.bg_style_separate;
+    // WebブラウザがHTML5ネイティブのcolor pickerに対応しているか否か
+    var is_native = $('#config_bgcolor_variable_1').spectrum.inputTypeColorSupport();
+    for (var i = 1 ; i <= animation_definition.default_sequence_number ; i++) {
+      if (is_native) {
+        // HTML5ネイティブのcolor picker設定
+        $('#config_bgcolor_variable_' + i).val(
+          getHexRGB(config['preset_' + i].r, config['preset_' + i].g, config['preset_' + i].b
+        ));
+      } else {
+        // spectrumライブラリのcolor picker設定
+        $('#config_bgcolor_variable_' + i).spectrum({
+          color: animation_definition.bg_style['preset_' + i],
+          showInput: true,
+          chooseText: 'OK',
+          cancelText: 'キャンセル',
+          beforeShow: function(tinycolor){},
+          preferredFormat: 'rgb'
+        });
+      }
+    }
+  }
+
+  /**
    * SNSシェア関連初期化
    */
   function initializeShare() {
@@ -1135,6 +1252,8 @@ $(function() {
   }
 
   // 画面ロード時初回実行
+  // Color picker（任意色指定）初期化
+  initializeColorPicker();
   // SNSシェア関連初期化
   initializeShare();
   // アニメーション起動（デモンストレーション）
