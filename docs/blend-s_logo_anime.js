@@ -228,6 +228,7 @@ $(function() {
     // .adjust_count: 左に流れる動きのカウンタ
     // .previous_frame_time: 前回フレーム描画の時刻
     // .previous_animate_time: アニメーション処理メソッドの前回処理時刻
+    // .frame_interval: 目標フレーム間隔時間(msec)
     // .now_playing: 現時点のアニメーション処理対象シーケンス番号
     // .sequence_queue: シーケンス番号のキュー
     //
@@ -781,7 +782,17 @@ $(function() {
     // ・全アニメーションフレームが終了していない
     // ・目標FPSとなる前フレーム処理からの時間経過
     if (animation_context.frame_index < animation_context.total_frames) {
-      if (animation_context.gif_encoder || (time - animation_context.previous_animate_time > 1000 / animation_definition.rendering_fps)) {
+      var actual_interval = time - animation_context.previous_animate_time;
+      if (animation_context.gif_encoder || (actual_interval > animation_context.frame_interval)) {
+        // 時間優先の場合、フレーム遅延が生じていたらスキップする（コマ落ち）
+        if ($('#animation_priority_time').prop('checked')) {
+          if (animation_context.previous_animate_time > 0 && 
+              actual_interval >= animation_context.frame_interval * 2) {
+            var frame_correction = (actual_interval / animation_context.frame_interval).toFixed() - 1;
+            animation_context.frame_index += frame_correction;
+            animation_context.adjust_count += frame_correction;
+          }
+        }
         animation_context.previous_animate_time = time;
         // 背景色でクリアし、各要素を描画
         animation_frame_clear();
@@ -1072,6 +1083,8 @@ $(function() {
     animation_context.previous_animate_time = 0;
     // 前回フレーム描画の時刻
     animation_context.previous_frame_time = 0;
+    // 目標フレーム間隔時間(msec)
+    animation_context.frame_interval = 1000 / animation_definition.rendering_fps;
   }
 
   /**
