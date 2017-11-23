@@ -177,7 +177,18 @@ $(function() {
       "fg_color": "rgb(255, 255, 255)",
 
       "//gif_filename": "アニメーションGIFダウンロードファイルデフォルト名",
-      "gif_filename": "blend-s_logo_animation.gif"
+      "gif_filename": "blend-s_logo_animation.gif",
+
+      "//stripe": "ロード時表示ストライプ関連",
+      "stripe": {
+        "total_frames": 40,
+        "bg_style": "rgb(255, 255, 255)",
+        "sequence_number": "0",
+        "count": 5,
+        "length": 1000,
+        "delay": 100,
+        "move_step": 50 
+      }
     }
   */}.toString().split("\n").slice(1, -1).join("\n");
   var animation_definition = JSON.parse(animation_definition_json);
@@ -212,6 +223,7 @@ $(function() {
     // .measure_canvas_context: canvas 2Dコンテキスト
     //
     // アニメーション処理制御関連
+    // .total_frames: 1シーケンスのフレーム数
     // .frame_index: アニメーション定義のステップ配列インデックス
     // .adjust_count: 左に流れる動きのカウンタ
     // .previous_frame_time: 前回フレーム描画の時刻
@@ -308,7 +320,7 @@ $(function() {
     var canvas_context = animation_context.rendering_canvas_context;
     canvas_context.clearRect(0, 0, animation_context.rendering_canvas_width, animation_context.rendering_canvas_height);
     canvas_context.fillStyle = animation_context.bg_style;
-    canvas_context.beginPath(); // TODO: 初期実装の残留か要確認
+    canvas_context.beginPath();
     canvas_context.rect(0, 0, animation_context.rendering_canvas_width, animation_context.rendering_canvas_height);
     canvas_context.fill();
   }
@@ -676,6 +688,44 @@ $(function() {
   }
 
   /**
+   * ロード時のストライプアニメーション処理
+   * ロード直後のテキストアニメーションが乱れる事象の緩和策として実行
+   * 描画領域の下から現れたストライプが上へ抜けていくように表示
+   * ストライプは1本ずつ少し遅れて隣を追従
+   */
+  function animation_stripe() {
+    // ストライプ数
+    var stripe_count = animation_definition.stripe.count;
+    // ストライプ表示間隔ピクセル数（描画領域幅をストライプ数で等分）
+    var stripe_interval = animation_context.rendering_canvas_width / stripe_count;
+    // ストライプの幅（=表示間隔）ピクセル数
+    var stripe_width = stripe_interval;
+    // ストライプの長さピクセル数
+    var stripe_length = animation_definition.stripe.length;
+    // 後のストライプが先のストライプより遅れて隣を追うように見せるための遅延間隔ピクセル数
+    var stripe_delay = animation_definition.stripe.delay;
+    // ストライプが進む速さ（1フレームあたりの進行ピクセル数）
+    var move_step = animation_definition.stripe.move_step;
+    // ストライプ移動開始位置となる描画領域下端座標
+    var bottom = animation_context.rendering_canvas_height;
+    // 参照名読み替え
+    var frame_index = animation_context.frame_index;
+    var canvas_context = animation_context.rendering_canvas_context;
+
+    var left, top;
+    for (var stripe_index = 0 ; stripe_index < stripe_count; stripe_index++) {
+      // ストライプを間隔ごとに表示
+      left = stripe_interval * stripe_index;
+      // ストライプ上端を描画領域下端からフレーム単位に上へ移動（+後進補正）
+      top = bottom - frame_index * move_step + stripe_delay * stripe_index;
+      canvas_context.fillStyle = animation_definition.bg_style['preset_' + (stripe_index + 1)];
+      canvas_context.beginPath();
+      canvas_context.rect(left, top, stripe_width, stripe_length);
+      canvas_context.fill();
+    }
+  }
+
+  /**
    * FPS算出
    * @return {number} 前回時刻と現在時刻の差から算出したFPS
    */
@@ -730,15 +780,24 @@ $(function() {
     // 以下の条件を満たす場合にアニメーション描画処理実施
     // ・全アニメーションフレームが終了していない
     // ・目標FPSとなる前フレーム処理からの時間経過
-    if (animation_context.frame_index < animation_definition.total_frames) {
+    if (animation_context.frame_index < animation_context.total_frames) {
       if (animation_context.gif_encoder || (time - animation_context.previous_animate_time > 1000 / animation_definition.rendering_fps)) {
         animation_context.previous_animate_time = time;
         // 背景色でクリアし、各要素を描画
         animation_frame_clear();
-        animation_call_non_capital();
-        animation_call_capital();
-        animation_attribute();
-        animation_name();
+        switch(animation_context.now_playing) {
+        case animation_definition.stripe.sequence_number:
+          // ロード時ストライプアニメーション
+          animation_stripe();
+          break;
+        default:
+          // 通常テキストアニメーション
+          animation_call_non_capital();
+          animation_call_capital();
+          animation_attribute();
+          animation_name();
+          break;
+        }
         animation_context.frame_index++;
         animation_context.adjust_count++;
         $('#effective_fps').text(calculateFps().toString());
@@ -969,6 +1028,7 @@ $(function() {
    * アニメーション状態管理初期化：シーケンス起動時
    */
   function initialize_animation_context_sequence_start() {
+    animation_context.total_frames = animation_definition.total_frames;
     // アニメーション定義のステップ配列インデックス
     animation_context.frame_index = 0;
     // 左に流れる動きのカウンタ
@@ -1135,6 +1195,23 @@ $(function() {
   }
 
   /**
+   * ロード時アニメーション処理起動
+   * ストライプ表示の後にテキストアニメーションを実施
+   */
+  function onload_ignite() {
+    // シーケンス実行キュー初期化
+    // この後に先行処理定義するストライプの後のテキストアニメーション分
+    sequence_queue_initialize();
+    // アニメーション状態管理初期化
+    initialize_animation_context();
+    // ストライプアニメーション用定義で初回実行アニメーション処理を注入
+    animation_context.total_frames = animation_definition.stripe.total_frames;
+    animation_context.now_playing = animation_definition.stripe.sequence_number;
+    animation_context.bg_style = animation_definition.stripe.bg_style;
+    window.requestNextAnimationFrame(animate);
+  }
+
+  /**
    * 「アニメーション」ボタンクリックハンドラ
    */
   $('#operation_animate').on('click', function() {
@@ -1257,5 +1334,5 @@ $(function() {
   // SNSシェア関連初期化
   initializeShare();
   // アニメーション起動（デモンストレーション）
-  animate_ignite();
+  onload_ignite();
 });
