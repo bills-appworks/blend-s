@@ -179,6 +179,9 @@ $(function() {
       "//gif_filename": "アニメーションGIFダウンロードファイルデフォルト名",
       "gif_filename": "blend-s_logo_animation.gif",
 
+      "//sequence_select_bg_style": "シーケンス選択時背景色",
+      "sequence_select_bg_style": "rgba(255, 255, 255, 0.1)",
+
       "//stripe": "ロード時表示ストライプ関連",
       "stripe": {
         "total_frames": 40,
@@ -239,6 +242,11 @@ $(function() {
     //
     // GIFファイル関連
     // .gif_encoder: jsgifのGIFEncoderインスタンス
+
+  /**
+   * アニメーション中止フラグ（設定変更操作等）
+   */
+  var animation_stop = false;
 
   /**
    * String.prototype.endsWith()が無いIE用polyfill
@@ -771,6 +779,15 @@ $(function() {
    * @param {number} time 呼び出し時刻
    */
   function animate(time) {
+    // アニメーション中止（設定変更操作等）
+    if (animation_stop) {
+      // GIFエンコーディング中ならばクリーンナップ
+      if (animation_context.gif_encoder) {
+        animation_context.gif_encoder.finish();
+        animation_context.gif_encoder = null;
+      }
+      return;
+    }
     // シーケンス処理中でなければ次のシーケンスで初期化処理
     if (!animation_context.now_playing) {
       if (animation_context.now_playing = animation_context.sequence_queue.shift()) {
@@ -1199,6 +1216,8 @@ $(function() {
    * アニメーション処理起動
    */
   function animate_ignite() {
+    // アニメーション中止フラグクリア
+    animation_stop = false;
     // シーケンス実行キュー初期化
     sequence_queue_initialize();
     // 現在実行状態をクリア
@@ -1212,6 +1231,8 @@ $(function() {
    * ストライプ表示の後にテキストアニメーションを実施
    */
   function onload_ignite() {
+    // アニメーション中止フラグクリア
+    animation_stop = false;
     // シーケンス実行キュー初期化
     // この後に先行処理定義するストライプの後のテキストアニメーション分
     sequence_queue_initialize();
@@ -1278,6 +1299,62 @@ $(function() {
     // color pickerに対応するラジオボタンを選択
     selectColorPickerRadio(this);
   });
+
+  /**
+   * 指定のシーケンスの設定でプレビュー表示（アニメーション最終フレーム）
+   * @param {string} sequence プレビュー対象シーケンス
+   */
+  function preview_sequence(sequence) {
+    // 対象シーケンスの背景色を強調して他のシーケンスは初期色に設定
+    for(var i = 1 ; i <= animation_definition.default_sequence_number ; i++) {
+      $('.sequence:nth-child(' + i + ')').css('background-color',
+        i.toString() ==  sequence ? animation_definition.sequence_select_bg_style : 'initial');
+    }
+    // アニメーション表示を中止
+    animation_stop = true;
+    // 対象シーケンスの設定をもとにアニメーション最終フレームを描画
+    animate_initialize(sequence);
+    animation_context.frame_index = animation_context.total_frames - 1;
+    animation_context.adjust_count  = animation_context.total_frames - 1;
+    animation_frame_clear();
+    animation_call_non_capital();
+    animation_call_capital();
+    animation_attribute();
+    animation_name();
+  }
+
+  /**
+   * シーケンス領域イベントハンドラ（クリック）
+   * 対象シーケンス設定によるプレビュー表示を実施
+   */
+  $('.sequence').on('click', function() {
+    preview_sequence(this.id.split('_').pop());
+  })
+
+  /**
+   * シーケンス領域のチェックボックスイベントハンドラ（変更、フォーカス）
+   * 対象シーケンス設定によるプレビュー表示を実施
+   */
+  $('.sequence input[type="checkbox"]').on('change focus', function() {
+    preview_sequence(this.id.split('_').pop());
+  })
+
+  /**
+   * シーケンス領域のテキストボックスイベントハンドラ（入力、フォーカス）
+   * 対象シーケンス設定によるプレビュー表示を実施
+   */
+  $('.sequence input[type="text"]').on('input focus', function() {
+    preview_sequence(this.id.split('_').pop());
+  })
+
+  /**
+   * シーケンス領域のラジオボタンイベントハンドラ（変更、フォーカス）
+   * 対象シーケンス設定によるプレビュー表示を実施
+   */
+  $('.sequence input[type="radio"]').on('change focus', function() {
+    // 対象シーケンス抽出のためname属性を利用
+    preview_sequence(this.name.split('_').pop());
+  })
 
   /**
    * Color picker（任意色選択）初期化
