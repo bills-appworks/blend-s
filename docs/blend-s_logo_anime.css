@@ -287,11 +287,6 @@ input[type="checkbox"] {
   clip: rect(0, 0, 0, 0);
 }
 
-/* "時間優先"チェックボックスのラベル部 */
-label[for="animation_priority_time"] {
-  color: gray;
-}
-
 /* ラジオボタン共通 */
 input[type="radio"] + label::before {
   /* 標準のラジオボタン描画を隠して装飾したものを表示 */
