@@ -797,12 +797,12 @@ $(function() {
 
     // 以下の条件を満たす場合にアニメーション描画処理実施
     // ・全アニメーションフレームが終了していない
-    // ・目標FPSとなる前フレーム処理からの時間経過
+    // ・目標FPSとなる前フレーム処理からの時間経過（アニメーションGIF録画処理ならば判定対象外）
     if (animation_context.frame_index < animation_context.total_frames) {
       var actual_interval = time - animation_context.previous_animate_time;
       if (animation_context.gif_encoder || (actual_interval > animation_context.frame_interval)) {
-        // 時間優先の場合、フレーム遅延が生じていたらスキップする（コマ落ち）
-        if ($('#animation_priority_time').prop('checked')) {
+        // アニメーションGIF録画中ではなく、かつ時間優先の場合、フレーム遅延が生じていたらスキップする（コマ落ち）
+        if (!animation_context.gif_encoder && $('#animation_priority_time').prop('checked')) {
           if (animation_context.previous_animate_time > 0 && 
               actual_interval >= animation_context.frame_interval * 2) {
             var frame_correction = (actual_interval / animation_context.frame_interval).toFixed() - 1;
