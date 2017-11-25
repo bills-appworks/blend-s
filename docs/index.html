@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="blend-s_logo_anime.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
     <script type="text/javascript" src="jsgif/b64.js"></script>
     <script type="text/javascript" src="jsgif/LZWEncoder.js"></script>
@@ -83,8 +83,8 @@
           <canvas id="measure_canvas"></canvas>
         </div>
       </div>
-      <!-- 利用者操作UI領域 -->
-      <div id="operation_area">
+      <!-- 利用者操作UI領域1 -->
+      <div id="operation_area1" class="operation_area">
         <span>
           <button id="operation_animate">アニメーション</button>
           <input type="checkbox" id="animation_priority_time" checked="checked" /><label for="animation_priority_time">時間優先</label>
@@ -354,6 +354,12 @@
           </div>
         </div>
       </div> <!-- config_area -->
+      <!-- 利用者操作UI領域2 -->
+      <div id="operation_area2" class="operation_area">
+        <span>
+          <button id="config_reset"><span>設定リセット</span></button>
+        </span>
+      </div>
       <hr />
       <div id="share">
         <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
@@ -372,6 +378,7 @@
         <a href="https://github.com/antimatter15/jsgif" target="_blank">jsgif</a>
         <a href="https://github.com/eligrey/FileSaver.js/" target="_blank">FileSaver.js</a>
         <a href="https://bgrins.github.io/spectrum/" target="_blank">Spectrum</a>
+        <a href="https://github.com/js-cookie/js-cookie" target="_blank">js-cookie</a>
         <a href="https://www.oreilly.co.jp/books/9784873116877/" target="_blank">プログラミング HTML5 Canvas</a>
         <a href="https://www.oreilly.co.jp/books/9784873117669/" target="_blank">CSSシークレット</a>
         <span>...and others</span>
