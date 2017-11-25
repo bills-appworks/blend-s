@@ -191,6 +191,81 @@ $(function() {
         "length": 1000,
         "delay": 100,
         "move_step": 50 
+      },
+
+      "//cookie": "cookie関連",
+      "cookie": {
+        "expires": 60,
+        "name": "blend-s_logo_anime",
+        "sequence_max": 100
+      },
+
+      "//default_config": "デフォルト設定",
+      "default_config": {
+        "animation_priority_time": true,
+        "sequence_number": 6,
+        "sequence": [
+          {
+            "enable": true,
+            "call": "Smile",
+            "attribute": "Sadistic",
+            "name": "Maika Sakuranomiya",
+            "bgcolor": "preset_1",
+            "bgcolor_variable": "preset_1",
+            "align": "right",
+            "fg_color": "rgb(255, 255, 255)"
+          },
+          {
+            "enable": true,
+            "call": "Sweet",
+            "attribute": "Tsundere",
+            "name": "Kaho Hinata",
+            "bgcolor": "preset_2",
+            "bgcolor_variable": "preset_2",
+            "align": "left",
+            "fg_color": "rgb(255, 255, 255)"
+          },
+          {
+            "enable": true,
+            "call": "Sister",
+            "attribute": "Imouto",
+            "name": "Mafuyu Hoshikawa",
+            "bgcolor": "preset_3",
+            "bgcolor_variable": "preset_3",
+            "align": "right",
+            "fg_color": "rgb(255, 255, 255)"
+          },
+          {
+            "enable": true,
+            "call": "Sadistic",
+            "attribute": "Oneesan",
+            "name": "Miu Amano",
+            "bgcolor": "preset_4",
+            "bgcolor_variable": "preset_4",
+            "align": "left",
+            "fg_color": "rgb(255, 255, 255)"
+          },
+          {
+            "enable": true,
+            "call": "Surprise",
+            "attribute": "Idol",
+            "name": "Hideri Kanzaki",
+            "bgcolor": "preset_5",
+            "bgcolor_variable": "preset_5",
+            "align": "bottom",
+            "fg_color": "rgb(255, 255, 255)"
+          },
+          {
+            "enable": true,
+            "call": "Service",
+            "attribute": "",
+            "name": "",
+            "bgcolor": "preset_6",
+            "bgcolor_variable": "preset_6",
+            "align": "top",
+            "fg_color": "rgb(255, 255, 255)"
+          }
+        ]
       }
     }
   */}.toString().split("\n").slice(1, -1).join("\n");
@@ -322,6 +397,92 @@ $(function() {
     )
   ();
   
+  /**
+   * 設定内容をcookie保存
+   */
+  function store_cookie() {
+    var value = {};
+    // 選択タブ
+    value.select_tab = "1";
+    // 時間優先
+    value.animation_priority_time = $('#animation_priority_time').prop('checked');
+    // シーケンス毎の設定
+    value.config = [];
+    for (var i = 1 ; i <= animation_definition.default_config.sequence_number ; i++) {
+      var sequence = {};
+      // n番目（有効／無効チェック）
+      sequence.enable = $('#sequence_enable_' + i).prop('checked');
+      // コール
+      sequence.call = $('#config_call_' + i).val();
+      // 属性
+      sequence.attribute = $('#config_attribute_' + i).val();
+      // 名前
+      sequence.name = $('#config_name_' + i).val();
+      // 背景色
+      sequence.bgcolor = $('input[name="config_bgcolor_' + i + '"]:checked').val();
+      // 背景色（color picker）
+      sequence.bgcolor_variable = $('#config_bgcolor_variable_' + i).val();
+      // 揃え方向
+      sequence.align = $('input[name="config_align_' + i + '"]:checked').val();
+      // 文字色
+      sequence.fgcolor = animation_definition.fg_color;
+      value.config.push(sequence);
+    }
+    // cookie保存
+    Cookies.set(animation_definition.cookie.name, value, {
+      expires: animation_definition.cookie.expires,
+      path: location.pathname
+    });
+  }
+
+  /**
+   * 設定内容をcookieから取得
+   */
+  function load_cookie() {
+    var value = Cookies.get(animation_definition.cookie.name);
+    if (value) {
+      value = JSON.parse(value);
+      // 選択タブ
+      //value.select_tab;
+      // 時間優先
+      $('#animation_priority_time').prop('checked', value.animation_priority_time);
+      // シーケンス毎の設定
+      if (value.config && Array.isArray(value.config)) {
+        // シーケンス数上限
+        if (value.config.length > animation_definition.cookie.sequence_max) {
+          value.config.length = animation_definition.cookie.sequence_max;
+        }
+        for (var i = 1 ; i <= value.config.length ; i++) {
+          var sequence = value.config[i - 1];
+          // n番目（有効／無効チェック）
+          $('#sequence_enable_' + i).prop('checked', sequence.enable);
+          // コール
+          $('#config_call_' + i).val(sequence.call);
+          // 属性
+          $('#config_attribute_' + i).val(sequence.attribute);
+          // 名前
+          $('#config_name_' + i).val(sequence.name);
+          // 背景色
+          $('input[name="config_bgcolor_' + i + '"]').val([sequence.bgcolor]);
+          // 背景色（color picker）
+          // WebブラウザがHTML5ネイティブのcolor pickerに対応しているか否か
+          var is_native = $('#config_bgcolor_variable_1').spectrum.inputTypeColorSupport();
+          if (is_native) {
+            // HTML5ネイティブのcolor picker設定
+            $('#config_bgcolor_variable_' + i).val(sequence.bgcolor_variable);
+          } else {
+            // spectrumライブラリのcolor picker設定
+            $('#config_bgcolor_variable_' + i).spectrum("set", sequence.bgcolor_variable);        
+          }
+          // 揃え方向
+          $('input[name="config_align_' + i + '"]').val([sequence.align]);
+          // 文字色
+          //sequence.fgcolor;
+        }
+      }
+    }
+  }
+
   /**
    * アニメーション描画処理：canvas全体を背景色で初期化
    */
@@ -1279,6 +1440,7 @@ $(function() {
    */
   function selectColorPickerRadio(color_picker_element) {
     // color picker要素に対応するラジオボタンnameをdata-radio属性から取得
+    // （prop()だと取得できない環境があるためattr()で実施）
     var radio = $(color_picker_element).attr('data-radio')
     // 指定したnameのラジオボタン群のcolor picker項目を選択
     $('input[name=' + radio + ']').val(['variable']);
@@ -1301,12 +1463,23 @@ $(function() {
   });
 
   /**
+   * Color picker変更ハンドラ（spectrumによる置き換え要素）
+   * 対象シーケンス設定によるプレビュー表示を実施
+   */
+  $('.config_bgcolor_variable').on('change', function() {
+    // color picker要素に対応するラジオボタンnameをdata-radio属性から取得
+    // （prop()だと取得できない環境があるためattr()で実施）
+    var radio = $(this).attr('data-radio')
+    preview_sequence(radio.split('_').pop());
+  });
+
+  /**
    * 指定のシーケンスの設定でプレビュー表示（アニメーション最終フレーム）
    * @param {string} sequence プレビュー対象シーケンス
    */
   function preview_sequence(sequence) {
     // 対象シーケンスの背景色を強調して他のシーケンスは初期色に設定
-    for(var i = 1 ; i <= animation_definition.default_sequence_number ; i++) {
+    for(var i = 1 ; i <= animation_definition.default_config.sequence_number ; i++) {
       $('.sequence:nth-child(' + i + ')').css('background-color',
         i.toString() ==  sequence ? animation_definition.sequence_select_bg_style : 'initial');
     }
@@ -1321,6 +1494,8 @@ $(function() {
     animation_call_capital();
     animation_attribute();
     animation_name();
+    // 設定変更の度にcookie保存
+    store_cookie();
   }
 
   /**
@@ -1357,6 +1532,47 @@ $(function() {
   })
 
   /**
+   * 「設定リセット」ボタンクリックハンドラ
+   */
+  $('#config_reset').on('click', function() {
+    var config = animation_definition.default_config;
+    // 選択タグ
+    //config.select_tab
+    // 時間優先
+    $('#animation_priority_time').prop('checked', config.animation_priority_time);
+    // シーケンス毎の設定
+    for (var i = 1 ; i <= animation_definition.default_config.sequence_number ; i++) {
+      // n番目（有効／無効チェック）
+      $('#sequence_enable_' + i).prop('checked', config.animation_priority_time);
+      // コール
+      $('#config_call_' + i).val(config.sequence[i - 1].call);
+      // 属性
+      $('#config_attribute_' + i).val(config.sequence[i - 1].attribute);
+      // 名前
+      $('#config_name_' + i).val(config.sequence[i - 1].name);
+      // 背景色
+      $('input[name="config_bgcolor_' + i + '"]').val([config.sequence[i - 1].bgcolor]);
+      // 背景色（color picker）
+      // HTML5/spectrumで共通
+      var bg_style_separate = animation_definition.bg_style_separate[config.sequence[i - 1].bgcolor_variable];
+      var rgb = getHexRGB(bg_style_separate.r, bg_style_separate.g, bg_style_separate.b);
+      $('#config_bgcolor_variable_' + i).val(rgb);
+      // 揃え方向
+      $('input[name="config_align_' + i + '"]').val([config.sequence[i - 1].align]);
+      // 文字色
+      //config.sequence[i].fgcolor;
+    }
+    // cookie保存の設定もリセット
+    store_cookie();
+    // 画面最上部へスクロール
+    // TODO: ブラウザに応じてスクロール処理を切り分け
+    window.scroll(0, 0);
+    $(window).scrollTop();
+    // ロード時のデモンストレーションを実行
+    onload_ignite();
+  });
+
+  /**
    * Color picker（任意色選択）初期化
    * 実装時点ではIEおよびiOS SafariがHTML5 color pickerに対応していないため
    * spectrumライブラリを併用
@@ -1367,7 +1583,7 @@ $(function() {
     var config = animation_definition.bg_style_separate;
     // WebブラウザがHTML5ネイティブのcolor pickerに対応しているか否か
     var is_native = $('#config_bgcolor_variable_1').spectrum.inputTypeColorSupport();
-    for (var i = 1 ; i <= animation_definition.default_sequence_number ; i++) {
+    for (var i = 1 ; i <= animation_definition.default_config.sequence_number ; i++) {
       if (is_native) {
         // HTML5ネイティブのcolor picker設定
         $('#config_bgcolor_variable_' + i).val(
@@ -1423,6 +1639,8 @@ $(function() {
   initializeColorPicker();
   // SNSシェア関連初期化
   initializeShare();
+  // 前回セション設定をcookieから取得
+  load_cookie();
   // アニメーション起動（デモンストレーション）
   onload_ignite();
 });

@@ -486,13 +486,13 @@ hr {
 }
 
 /* 利用者操作UI領域の各要素を縦並び */
-#operation_area {
+.operation_area {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-#operation_area > * {
+.operation_area > * {
   margin-top: 0.2em;
   margin-bottom: 0.2em;
 }
