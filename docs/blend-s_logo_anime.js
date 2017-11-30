@@ -1642,5 +1642,6 @@ $(function() {
   // 前回セション設定をcookieから取得
   load_cookie();
   // アニメーション起動（デモンストレーション）
+  animate_initialize(); // 初回実行時にフォントサイズ計測に失敗する環境対策アドホック
   onload_ignite();
 });
