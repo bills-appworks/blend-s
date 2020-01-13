@@ -1226,11 +1226,15 @@ $(function() {
 
   /**
    * アニメーション状態管理初期化：全体初回
+   * @param {string} target_canvas 描画対象canvas要素ID
    */
-  function initialize_animation_context() {
+  function initialize_animation_context(target_canvas) {
+    if (!target_canvas) {
+      target_canvas = '#rendering_canvas';
+    }
     // アニメーション描画canvas
     // jQuery要素オブジェクト
-    animation_context.rendering_canvas = $('#rendering_canvas');
+    animation_context.rendering_canvas = $(target_canvas);
     // canvas 2Dコンテキスト
     animation_context.rendering_canvas_context = animation_context.rendering_canvas[0].getContext('2d');
 
@@ -1342,14 +1346,15 @@ $(function() {
   /**
    * アニメーション処理初期化
    * @param {string} sequence 初期化対象シーケンス
+   * @param {string} target_canvas 描画対象canvas要素ID
    */
-  function animate_initialize(sequence) {
+  function animate_initialize(sequence, target_canvas) {
     // IE11でデフォルトパラメタがサポートされていないので代替
     if (sequence === undefined) {
       sequence = '1';
     }
     // アニメーション状態管理初期化
-    initialize_animation_context();
+    initialize_animation_context(target_canvas);
     // 目標FPS（非表示）
     $('#target_fps').text(animation_definition.rendering_fps.toString());
     // 画面表示設定初期化
@@ -1478,15 +1483,18 @@ $(function() {
    * @param {string} sequence プレビュー対象シーケンス
    */
   function preview_sequence(sequence) {
-    // 対象シーケンスの背景色を強調して他のシーケンスは初期色に設定
-    for(var i = 1 ; i <= animation_definition.default_config.sequence_number ; i++) {
-      $('.sequence:nth-child(' + i + ')').css('background-color',
-        i.toString() ==  sequence ? animation_definition.sequence_select_bg_style : 'initial');
-    }
     // アニメーション表示を中止
     animation_stop = true;
     // 対象シーケンスの設定をもとにアニメーション最終フレームを描画
-    animate_initialize(sequence);
+    animate_initialize(sequence, '#preview_in_sequence_' + sequence);
+    // 対象シーケンスの背景色を強調して他のシーケンスは初期色に設定
+    // シーケンス単位のプレビュー表示
+    for(var i = 1 ; i <= animation_definition.default_config.sequence_number ; i++) {
+      $('.sequence:nth-child(' + i + ')').css('background-color',
+        i.toString() ==  sequence ? animation_definition.sequence_select_bg_style : 'initial');
+      $('.sequence:nth-child(' + i + ') .preview_in_sequence').css('display',
+        i.toString() == sequence ? 'initial' : 'none');
+    }
     animation_context.frame_index = animation_context.total_frames - 1;
     animation_context.adjust_count  = animation_context.total_frames - 1;
     animation_frame_clear();
