@@ -552,7 +552,7 @@ hr {
   margin-right: 0.5em;
 }
 
-#author a, #thanks a, #copyright a, #license a {
+#author a, #thanks a, #copyright a, #license a, #privacy_policy a {
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6),
                -1px 1px 1px rgba(255, 255, 255, 0.6),
                -1px -1px 1px rgba(255, 255, 255, 0.6),
