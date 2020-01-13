@@ -1621,6 +1621,10 @@ $(function() {
     //config.select_tab
     // 時間優先
     $('#animation_priority_time').prop('checked', config.animation_priority_time);
+    // シーケンス選択強調表示の初期化
+    $('.sequence').css('background-color', 'initial');
+    // シーケンス単位のプレビュー非表示
+    $('.preview_in_sequence').css('display', 'none');
     // シーケンス毎の設定
     for (var i = 1 ; i <= animation_definition.default_config.sequence_number ; i++) {
       // n番目（有効／無効チェック）
