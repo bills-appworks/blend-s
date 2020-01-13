@@ -2,7 +2,7 @@
  * @fileoverview 「ブレンド・S」オープニング風ロゴアニメーションジェネレータ
  * @author twitter:@billstw
  * 
- * Copyright (c) 2017 bills-appworks
+ * Copyright (c) 2017-2020 bills-appworks
  * This software is released under the MIT License.
  * http://opensource.org/licenses/mit-license.php
  */
@@ -266,10 +266,49 @@ $(function() {
             "fg_color": "rgb(255, 255, 255)"
           }
         ]
-      }
+      },
+      "version": "1.0.0"
     }
   */}.toString().split("\n").slice(1, -1).join("\n");
   var animation_definition = JSON.parse(animation_definition_json);
+
+  /**
+   * 再現URLパラメタ値長さ制限
+   */
+  var limitV1_0_0 = {
+    call: {
+      notation: {min: 0, max: 100}
+    },
+    attribute: {
+      notation: {min: 0, max: 100}
+    },
+    name: {
+      notation: {min: 0, max: 100}
+    },
+    bgcolor: {
+      notation: {min: 0, max: 10},
+      select: {min: 1, max: 8}
+    },
+    bgcolor_variable: {
+      notation: {min: 0, max: 10}
+    },
+    align: {
+      notation: {min: 0, max: 10}
+    },
+    fgcolor: {
+      notation: {min: 0, max: 64}
+    }
+  }
+
+  /**
+   * URLパラメタ
+   */
+  var url_parameter = {};
+  
+  /**
+   * 非画面入力項目設定
+   */
+  var non_input_config = {};
 
   /**
    * 非表示領域measure_canvasに描画して計測した値
@@ -425,7 +464,7 @@ $(function() {
       // 揃え方向
       sequence.align = $('input[name="config_align_' + i + '"]:checked').val();
       // 文字色
-      sequence.fgcolor = animation_definition.fg_color;
+      sequence.fgcolor = non_input_config.sequence[i - 1].fg_color;
       value.config.push(sequence);
     }
     // cookie保存
@@ -477,7 +516,7 @@ $(function() {
           // 揃え方向
           $('input[name="config_align_' + i + '"]').val([sequence.align]);
           // 文字色
-          //sequence.fgcolor;
+          non_input_config.sequence[i - 1].fg_color = sequence.fgcolor;
         }
       }
     }
@@ -1214,6 +1253,31 @@ $(function() {
   }
 
   /**
+   * 指定したRGB文字列 rgb(<r>, <g>, <b>)に対応するRGB16進文字列(#FFFFFF)を取得
+   * @param {string} rgb "rgb(<r>, <g>, <b>)"
+   * @return {string} '#FFFFFF'形式のRGB値表現文字列
+   */
+  function getHexRGBstring(rgb) {
+    var convertRGB = rgb.replace('rgb(', '');
+    var convertRGB = convertRGB.replace(')', '');
+    var convertRGB = convertRGB.split(',');
+    return getHexRGB(parseInt(convertRGB[0], 10), parseInt(convertRGB[1], 10), parseInt(convertRGB[2], 10));
+  }
+
+  /**
+   * 指定したRGB16進文字列(#FFFFFF)に対応するRGB文字列 rgb(<r>, <g>, <b>)を取得
+   * @param {string} hexRGB '#FFFFFF'形式のRGB値表現文字列
+   * @return {string} "rgb(<r>, <g>, <b>)"
+   */
+  function getRGBstring(hexRGB) {
+    hexRGB = hexRGB.replace('#', '');
+    var r = parseInt(hexRGB.substring(0, 2), 16);
+    var g = parseInt(hexRGB.substring(2, 4), 16);
+    var b = parseInt(hexRGB.substring(4, 6), 16);
+    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+  }
+
+  /**
    * アニメーション状態管理初期化：シーケンス起動時
    */
   function initialize_animation_context_sequence_start() {
@@ -1340,7 +1404,7 @@ $(function() {
     }
 
     // 文字色（前景色）
-    animation_config.fg_color = animation_definition.fg_color;
+    animation_config.fg_color = non_input_config.sequence[parseInt(target, 10) - 1].fg_color;
   }
 
   /**
@@ -1419,6 +1483,13 @@ $(function() {
     animation_context.gif_encoder = undefined;
     // アニメーション処理起動
     animate_ignite();
+  });
+
+  /**
+   * 「時間優先」チェックボックス変更ハンドラ
+   */
+  $('#animation_priority_time').on('change', function() {
+    displayReplayUrl();
   });
 
   /**
@@ -1504,6 +1575,8 @@ $(function() {
     animation_name();
     // 設定変更の度にcookie保存
     store_cookie();
+    // 再現URL表示
+    displayReplayUrl();
   }
 
   /**
@@ -1568,7 +1641,7 @@ $(function() {
       // 揃え方向
       $('input[name="config_align_' + i + '"]').val([config.sequence[i - 1].align]);
       // 文字色
-      //config.sequence[i].fgcolor;
+      non_input_config.sequence[i - 1].fg_color = config.sequence[i - 1].fg_color;
     }
     // cookie保存の設定もリセット
     store_cookie();
@@ -1578,8 +1651,28 @@ $(function() {
     $(window).scrollTop();
     // ロード時のデモンストレーションを実行
     onload_ignite();
+    displayReplayUrl();
   });
 
+  /**
+   * 再現URLコピーボタンクリックハンドラ
+   */
+  $('#copy_replay_url').on('click', function() {
+    var work_replay_url = $('#replay_url').clone();
+    work_replay_url.css({
+      top: "-2000px",
+      left: "-2000px",
+    })
+    work_replay_url.appendTo('body');
+    work_replay_url.select();
+    document.execCommand("copy");
+    work_replay_url.remove();
+    $('#copied_balloon').addClass('copied_balloon-fadeout');
+    setTimeout(function() {
+      $('#copied_balloon').removeClass('copied_balloon-fadeout');
+    }, 3000);
+  });
+  
   /**
    * Color picker（任意色選択）初期化
    * 実装時点ではIEおよびiOS SafariがHTML5 color pickerに対応していないため
@@ -1607,6 +1700,8 @@ $(function() {
           beforeShow: function(tinycolor){},
           preferredFormat: 'rgb'
         });
+        // 初期状態で再現URL生成時に値が取得できない事象に対するワークアラウンド
+        $('#config_bgcolor_variable_' + i).spectrum("set", animation_definition.bg_style['preset_' + i]);        
       }
     }
   }
@@ -1642,14 +1737,197 @@ $(function() {
     }
   }
 
+  /**
+   * 非画面入力項目初期化
+   */
+  function initializeNonInputConfig() {
+    non_input_config.sequence = [];
+    for (var i = 1 ; i <= animation_definition.default_config.sequence_number ; i++) {
+      var sequence = {};
+      // 文字色
+      sequence.fg_color = animation_definition.default_config.sequence[i - 1].fg_color;
+      non_input_config.sequence.push(sequence);
+    }
+  }
+
+  /**
+   * バージョンに対応したパラメタ指定再現URLの表示
+   */
+  function displayReplayUrl() {
+    switch (animation_definition.version) {
+      case '1.0.0':
+      default:
+        return displayReplayUrlV1_0_0();
+    }
+  }
+
+  /**
+   * パラメタ指定再現URLの表示（V1.0.0)
+   */
+  function displayReplayUrlV1_0_0() {
+    var url = location.href.split('?')[0];
+    var params = [];
+    // WebブラウザがHTML5ネイティブのcolor pickerに対応しているか否か
+    var is_native = $('#config_bgcolor_variable_1').spectrum.inputTypeColorSupport();
+    params.push(['t0', encodeURIComponent($('#animation_priority_time').prop('checked') ? 1 : 0)]);
+    for (var i = 1; i <= animation_definition.default_config.sequence_number ; i++) {
+      params.push(['e' + i, encodeURIComponent($('#sequence_enable_' + i).prop('checked') ? 1 : 0)]);
+      params.push(['c' + i, encodeURIComponent($('#config_call_' + i).val())]);
+      params.push(['a' + i, encodeURIComponent($('#config_attribute_' + i).val())]);
+      params.push(['n' + i, encodeURIComponent($('#config_name_' + i).val())]);
+      params.push(['b' + i, encodeURIComponent($('input[name="config_bgcolor_' + i + '"]:checked').val())]);
+      var bgcolor_variable = $('#config_bgcolor_variable_' + i).val()
+      if (is_native) {
+        // HTML5ネイティブのcolor picker設定
+        bgcolor_variable = bgcolor_variable.substring(1).toUpperCase();
+      } else {
+        // spectrumライブラリのcolor picker設定
+        bgcolor_variable = getHexRGBstring(bgcolor_variable).substring(1);
+      }
+      params.push(['r' + i, encodeURIComponent(bgcolor_variable)]);
+      params.push(['d' + i, encodeURIComponent($('input[name="config_align_' + i + '"]:checked').val())]);
+      //params.push(['f' + i, encodeURIComponent(getHexRGBstring(animation_definition.default_config.sequence[i - 1].fg_color).substring(1))]);
+      params.push(['f' + i, encodeURIComponent(getHexRGBstring(non_input_config.sequence[i - 1].fg_color).substring(1))]);
+    }
+    params.push(['v', animation_definition.version]);
+    // [[A,B],[C,D]] => A=B&C=D
+    var paramsExpand = params.map(function(element) {
+      return element.reduce(function(prev, current) {
+        return prev + '=' + current;
+      })
+    }).reduce(function(prev, current) {
+      return prev + '&' + current;
+    });
+    $('#replay_url').val(url + '?' + paramsExpand);
+  }
+
+  /**
+   * バージョンに対応した制限定義オブジェクトの取得
+   * @return {object} 制限定義オブジェクト
+   */
+  function getLimit() {
+    switch (animation_definition.version) {
+      case '1.0.0':
+      default:
+        return limitV1_0_0;
+    }
+  }
+
+  /**
+   * パラメタオブジェクトを設定に適用(V1.0.0)
+   */
+  function applyUrlParameterV1_0_0() {
+    animation_definition.version = url_parameter.v;
+    for (var param in url_parameter) {
+      var index = 0;
+      if (param.length > 1) {
+        index = parseInt(param.substring(1), 10);
+        if ((index < 0) || (index > animation_definition.default_config.sequence_number)) {
+          index = 0;
+        }
+      }
+      switch (param.substring(0, 1)) {
+        case 't':
+          $('#animation_priority_time').prop('checked', decodeURIComponent(url_parameter[param]) != '0');
+          break;
+        case 'e':
+          $('#sequence_enable_' + index).prop('checked', decodeURIComponent(url_parameter[param]) != '0');
+          break;
+        case 'c':
+          $('#config_call_' + index).val(decodeURIComponent(url_parameter[param]).substring(0, getLimit().call.notation.max));
+          break;
+        case 'a':
+          $('#config_attribute_' + index).val(decodeURIComponent(url_parameter[param]).substring(0, getLimit().attribute.notation.max));
+          break;
+        case 'n':
+          $('#config_name_' + index).val(decodeURIComponent(url_parameter[param]).substring(0, getLimit().name.notation.max));
+          break;
+        case 'b':
+          $('input[name="config_bgcolor_' + index + '"]').val([decodeURIComponent(url_parameter[param]).substring(0, getLimit().bgcolor.notation.max)]);
+          break;
+        case 'r':
+          // WebブラウザがHTML5ネイティブのcolor pickerに対応しているか否か
+          var is_native = $('#config_bgcolor_variable_1').spectrum.inputTypeColorSupport();
+          if (is_native) {
+            // HTML5ネイティブのcolor picker設定
+            $('#config_bgcolor_variable_' + index).val('#' + decodeURIComponent(url_parameter[param]).substring(0, getLimit().bgcolor_variable.notation.max));
+          } else {
+            // spectrumライブラリのcolor picker設定
+            $('#config_bgcolor_variable_' + index).spectrum("set", '#' + decodeURIComponent(url_parameter[param]).substring(0, getLimit().bgcolor_variable.notation.max));
+          }
+          break;
+        case 'd':
+          $('input[name="config_align_' + index + '"]').val([decodeURIComponent(url_parameter[param]).substring(0, getLimit().align.notation.max)]);
+          break;
+        case 'f':
+          //animation_definition.default_config.sequence[index - 1].fg_color = getRGBstring(decodeURIComponent(url_parameter[param]).substring(0, getLimit().fgcolor.notation.max));
+          non_input_config.sequence[index - 1].fg_color = getRGBstring(decodeURIComponent(url_parameter[param]).substring(0, getLimit().fgcolor.notation.max));
+          break;
+      }
+    }
+  }
+
+  /**
+   * バージョンに対応したURLパラメタオブジェクトの適用
+   */
+  function applyUrlParameter() {
+    switch(url_parameter.v) {
+      case '1.0.0':
+      default:
+        applyUrlParameterV1_0_0();
+    }
+  }
+
+  /**
+   * URLパラメタ解析
+   */
+  function parseUrlParameter() {
+    var urlParameter = location.search;
+    if (urlParameter && urlParameter.length > 1) {
+      urlParameter.substring(1).split('&').map(function(element) {
+        var keyvalue = element.split('=');
+        url_parameter[keyvalue[0]] = keyvalue[1];
+      });
+    }
+  }
+
+/**
+ * バージョン表記の検証および返却
+ * @param {string} version 外部指定のバージョン表記 
+ * @return {string} 正規化バージョン表記
+ */
+function validateRenderVersion(version) {
+  switch(version) {
+    case '1.0.0':
+      return version;
+
+    default:
+      // 最新バージョンとして扱う
+      return '1.0.0';
+  }
+}
+
   // 画面ロード時初回実行
   // Color picker（任意色指定）初期化
   initializeColorPicker();
   // SNSシェア関連初期化
   initializeShare();
-  // 前回セション設定をcookieから取得
-  load_cookie();
+  // 非画面入力項目初期化
+  initializeNonInputConfig();
+  // URLパラメタ解析
+  parseUrlParameter();
+  if (Object.keys(url_parameter).length > 0) {
+    url_parameter.v = validateRenderVersion(url_parameter.v);
+    applyUrlParameter();
+    // パラメタ指定の設定をcookieに保存
+    store_cookie();
+  } else {
+    // 前回セション設定をcookieから取得
+    load_cookie();
+  }
   // アニメーション起動（デモンストレーション）
   animate_initialize(); // 初回実行時にフォントサイズ計測に失敗する環境対策アドホック
   onload_ignite();
+  // 再現URL表示
+  displayReplayUrl();
 });

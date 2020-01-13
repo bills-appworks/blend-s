@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>「ブレンド・S」オープニング風ロゴアニメーションジェネレータ</title>
     <!--
-      Copyright (c) 2017 bills-appworks
+      Copyright (c) 2017-2020 bills-appworks
       This software is released under the MIT License.
       http://opensource.org/licenses/mit-license.php
     -->
@@ -392,6 +392,23 @@
           <button id="config_reset"><span>設定リセット</span></button>
         </span>
       </div>
+      <!-- 利用者操作UI領域3 -->
+      <div id="operation_area3" class="operation_area">
+        <div class="pane replay_url_pane">
+          <div class="replay_url_header">
+            <div class="description">
+              <sapn>再現URL</sapn>
+            </div>
+            <button id="copy_replay_url">
+              <span>コピー</span>
+            </button>
+            <div id="copied_balloon" class="copied_balloon">
+              <span>コピーしました</span>
+            </div>
+          </div>
+          <textarea id="replay_url" readonly></textarea>
+        </div>
+      </div>
       <hr />
       <div id="share">
         <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
@@ -416,10 +433,13 @@
         <span>...and others</span>
       </div>
       <div id="copyright">
-        <span>Copyright (c) 2017-2019 bills-appworks</span>
+        <span>Copyright (c) 2017-2020 bills-appworks</span>
       </div>
       <div id="license">
         <span>This software is released under the <a href="http://opensource.org/licenses/mit-license.php" target="_blank">MIT License </a>.</span>
+      </div>
+      <div id="privacy_policy">
+        <span><a href="privacy_policy.html">プライバシーポリシー/Privacy policy</a></span>
       </div>
     </div> <!-- content_area -->
   </body>
