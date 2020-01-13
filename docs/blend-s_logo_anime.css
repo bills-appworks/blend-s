@@ -1,6 +1,6 @@
 ﻿/*
  * 「ブレンド・S」オープニング風ロゴアニメーションジェネレータ
- * Copyright (c) 2017 bills-appworks
+ * Copyright (c) 2017-2020 bills-appworks
  * This software is released under the MIT License.
  * http://opensource.org/licenses/mit-license.php
  */
@@ -449,6 +449,85 @@ input[type="radio"] {
   color: rgb(100, 196, 22);
 }
 
+/* 再現URL関連領域 */
+#operation_area3 {
+  width: 100%;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.pane {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5em;
+}
+
+.replay_url_pane {
+  width: 60%;
+}
+
+/* 再現URLヘッダ（説明、ボタン、バルーン） */
+.replay_url_header {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  width: 100%;
+}
+
+.replay_url_header > * {
+  margin: 0.5em;
+}
+
+#copy_replay_url {
+  font-size: small;
+}
+
+/* 再現URLテキスト */
+#replay_url {
+  width: 100%;
+  height: 8em;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px dashed rgba(255, 255, 255, 0.7);
+}
+
+/* 再現URLコピーボタンクリック時バルーン */
+.copied_balloon {
+  padding: 0 0.5em 0 0.5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: small;
+  color: #FFFFFF;
+  background-color: #FFAAAA;
+  visibility: hidden;
+  transition: opacity 0.5s;
+  transition-delay: 1s;
+  opacity: 1;
+  /* for callout */
+  position: relative;
+}
+
+.copied_balloon-fadeout {
+  opacity: 0;
+  visibility: visible;
+}
+
+/* callout */
+.copied_balloon::before {
+  content: "";
+  position: absolute;
+  top: 0.5em;
+  left: -0.4em;
+  padding: 0.35em;
+  background: inherit;
+  border-top: 0;
+  border-right: 0;
+  transform: rotate(45deg);
+}
+
 hr {
   width: 100%;
   border: 1px dashed rgba(255, 255, 255, 0.7);
@@ -551,6 +630,10 @@ input[type="checkbox"] + label::before {
 
 input[type="text"] {
   margin: 0.2em auto 0.8em;
+}
+
+.replay_url_pane {
+  width: 80%;
 }
 
 } /* @media (max-width: 800px) */
