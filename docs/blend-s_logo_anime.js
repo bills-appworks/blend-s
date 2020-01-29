@@ -267,6 +267,7 @@ $(function() {
           }
         ]
       },
+      "language": "",
       "version": "1.0.0"
     }
   */}.toString().split("\n").slice(1, -1).join("\n");
@@ -1476,6 +1477,15 @@ $(function() {
   }
 
   /**
+   * UI言語変更ハンドラ
+   */
+  $('#language').on('change', function() {
+    var language = $(this).val();
+    animation_definition.language = language;
+    switchLanguage(language);
+  });
+
+  /**
    * 「アニメーション」ボタンクリックハンドラ
    */
   $('#operation_animate').on('click', function() {
@@ -1895,21 +1905,51 @@ $(function() {
     }
   }
 
-/**
- * バージョン表記の検証および返却
- * @param {string} version 外部指定のバージョン表記 
- * @return {string} 正規化バージョン表記
- */
-function validateRenderVersion(version) {
-  switch(version) {
-    case '1.0.0':
-      return version;
+  /**
+   * バージョン表記の検証および返却
+   * @param {string} version 外部指定のバージョン表記 
+   * @return {string} 正規化バージョン表記
+   */
+  function validateRenderVersion(version) {
+    switch(version) {
+      case '1.0.0':
+        return version;
 
-    default:
-      // 最新バージョンとして扱う
-      return '1.0.0';
+      default:
+        // 最新バージョンとして扱う
+        return '1.0.0';
+    }
   }
-}
+
+  /**
+   * Apply web browser language preference
+   */
+  function applyBrowserLanguage() {
+    var browserLanguage = window.navigator.language ? window.navigator.language.substring(0, 2) : undefined;
+    animation_definition.language = browserLanguage;
+    switchLanguage(browserLanguage);
+  }
+
+  /**
+   * Switch display language
+   * @param {string} language display language identification (2 letter)
+   */
+  function switchLanguage(language) {
+    switch(language) {
+      case 'ja':
+        $("[lang='ja']").removeClass('hideByLanguage');
+        $("[lang='en']").addClass('hideByLanguage');
+        break;
+
+      case 'en':
+      default:
+        $("[lang='en']").removeClass('hideByLanguage');
+        $("[lang='ja']").addClass('hideByLanguage');
+        break;
+    }
+
+    $('#language').val(language);
+  }
 
   // 画面ロード時初回実行
   // Color picker（任意色指定）初期化
@@ -1918,6 +1958,8 @@ function validateRenderVersion(version) {
   initializeShare();
   // 非画面入力項目初期化
   initializeNonInputConfig();
+  // ブラウザ言語設定適用
+  applyBrowserLanguage();
   // URLパラメタ解析
   parseUrlParameter();
   if (Object.keys(url_parameter).length > 0) {

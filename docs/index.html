@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>「ブレンド・S」オープニング風ロゴアニメーションジェネレータ</title>
+    <title lang="ja">「ブレンド・S」オープニング風ロゴアニメーションジェネレータ / Blend S - Opening-style logo animation generator</title>
     <!--
       Copyright (c) 2017-2020 bills-appworks
       This software is released under the MIT License.
@@ -24,21 +24,21 @@
     <link rel="icon" href="blend-s_logo_anime_192x192.png" sizes="192x192" />
     <link rel="apple-touch-icon-precomposed" href="blend-s_logo_anime_180x180.png" />
     <meta name="msapplication-TileImage" content="blend-s_logo_anime_270x270.png">
-    <meta name="description" content="「ブレンド・S」アニメオープニング冒頭風のロゴアニメーションを生成するアプリです。">
+    <meta name="description" content="「ブレンド・S」アニメオープニング冒頭風のロゴアニメーションを生成するアプリです。 / Application for generate logo animation of the Blend S cartoon opening.">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ">
+    <meta property="og:title" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ / Blend S - Opening-style logo animation generator">
     <meta property="og:url" content="https://bills-appworks.github.io/blend-s/">
-    <meta property="og:description" content="「ブレンド・S」アニメオープニング冒頭風のロゴアニメーションを生成するアプリです。">
+    <meta property="og:description" content="「ブレンド・S」アニメオープニング冒頭風のロゴアニメーションを生成するアプリです。 / Application for generate logo animation of the Blend S cartoon opening.">
     <meta property="og:image" content="https://bills-appworks.github.io/blend-s/share_image.png">
-    <meta property="og:site_name" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ">
+    <meta property="og:site_name" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ / Blend S - Opening-style logo animation generator">
     <meta property="og:locale" content="ja_JP">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@billstw">
     <meta name="twitter:creator:id" content="@billstw">
-    <meta name="twitter:description" content="「ブレンド・S」アニメオープニング冒頭風のロゴアニメーションを生成するアプリです。">
-    <meta name="twitter:title" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ">
+    <meta name="twitter:description" content="「ブレンド・S」アニメオープニング冒頭風のロゴアニメーションを生成するアプリです。 / Application for generate logo animation of the Blend S cartoon opening.">
+    <meta name="twitter:title" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ / Blend S - Opening-style logo animation generator">
     <meta name="twitter:image" content="https://bills-appworks.github.io/blend-s/share_image.png">
-    <meta name="twitter:image:alt" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ">
+    <meta name="twitter:image:alt" content="「ブレンド・S」オープニング風ロゴアニメーションジェネレータ / Blend S - Opening-style logo animation generator">
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -63,8 +63,16 @@
       js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.9";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
-    <div id="body_title"><div id="title_blend">ブレンド・</div><div id="title_S">S<span id="title_S_vertical"></span></div></div>
-    <div id="description"><span>オープニング風ロゴアニメーション</span><span>ジェネレータ</span></div>
+    <header>
+      <div id="body_title"><div lang="ja" id="title_blend">ブレンド・</div><div lang="en" class="hideByLanguage">Blend&nbsp;</div><div id="title_S">S<span id="title_S_vertical"></span></div></div>
+      <div class="header-right">
+        <select size="1" id="language">
+          <option value="en">English - 英語</option>
+          <option value="ja">Japanese - 日本語</option>
+        </select>
+      </div>
+    </header>
+    <div id="description"><span lang="ja">オープニング風ロゴアニメーション</span><span lang="ja">ジェネレータ</span><span lang="en" class="hideByLanguage">Opening-style&nbsp;</span><span lang="en" class="hideByLanguage">logo animation generator</span></div>
     <!-- タブインデックス風装飾表示 -->
     <div id="tab">
       <span class="tab_element">CAFÉ STILE</span>
@@ -80,7 +88,7 @@
       <div id="rendering_area">
         <div>
           <!-- レンダリング性能(FPS)確認表示（非表示） -->
-          <p id="rendering_performance">Rendering (目標: <span id="target_fps">--</span> fps / 実効: <span id="effective_fps">--</span> fps)</p>
+          <p id="rendering_performance">Rendering (target: <span id="target_fps">--</span> fps / effective: <span id="effective_fps">--</span> fps)</p>
         </div>
         <div>
           <!-- アニメーション描画 -->
@@ -94,11 +102,11 @@
       <!-- 利用者操作UI領域1 -->
       <div id="operation_area1" class="operation_area">
         <span>
-          <button id="operation_animate">アニメーション</button>
-          <input type="checkbox" id="animation_priority_time" checked="checked" /><label for="animation_priority_time">時間優先</label>
-        </span>
+          <button id="operation_animate"><span lang="ja">アニメーション</span><span lang="en" class="hideByLanguage">Animate</span></button>
+          <input type="checkbox" id="animation_priority_time" checked="checked" /><label for="animation_priority_time"><span lang="ja">時間優先</span><span lang="en" class="hideByLanguage">Time priority</span></label for="animation_priority_time">
+        </label>
         <span>
-          <button id="operation_download"><span>アニメーションGIF録画</span><span>＆ダウンロード</span></button>
+          <button id="operation_download"><span lang="ja">アニメーションGIF録画</span><span lang="ja">＆ダウンロード</span><span lang="en" class="hideByLanguage">Rec GIF&nbsp;</span><span lang="en" class="hideByLanguage">&amp; Download</span></button>
         </span>
       </div>
       <!-- 表示内容設定UI領域 -->
@@ -106,7 +114,7 @@
         <!-- その1 -->
         <div id="sequence_1" class="sequence">
           <div class="sequence_header">
-            <input type="checkbox" id="sequence_enable_1" class="sequence_enable" checked="checked" /><label for="sequence_enable_1">1番目</label>
+            <input type="checkbox" id="sequence_enable_1" class="sequence_enable" checked="checked" /><label for="sequence_enable_1"><span lang="ja">1番目</span><span lang="en" class="hideByLanguage">1st</span></label for="sequence_enable_1">
           </div>
           <div class="preview_in_sequence_container">
             <!-- アクティブ時のプレビュー表示（デフォルト非表示） -->
@@ -114,18 +122,18 @@
           </div>
           <div class="sequence_text">
             <div class="sequence_call">
-              <label for="config_call_1">コール: </label><input type="text" id="config_call_1" value="Smile" />
+              <label for="config_call_1"><span lang="ja">コール: </span><span lang="en" class="hideByLanguage">Call: </span></label for="config_call_1"><input type="text" id="config_call_1" value="Smile" />
             </div>
             <div class="sequence_attribute">
-              <label for="config_attribute_1">属性: </label><input type="text" id="config_attribute_1" value="Sadistic" />
+              <label for="config_attribute_1"><span lang="ja">属性: </span><span lang="en" class="hideByLanguage">Attribute: </span></label for="config_attribute_1"><input type="text" id="config_attribute_1" value="Sadistic" />
             </div>
             <div class="sequence_name">
-              <label for="config_name_1">名前: </label><input type="text" id="config_name_1" value="Maika Sakuranomiya" />
+              <label for="config_name_1"><span lang="ja">名前: </span><span lang="en" class="hideByLanguage">Name: </span></label for="config_name_1"><input type="text" id="config_name_1" value="Maika Sakuranomiya" />
             </div>
           </div>
           <div class="sequence_bgcolor">
             <div>
-              <span>背景色: </span>
+              <span lang="ja">背景色: </span><span lang="en" class="hideByLanguage">Background: </span>
               <span>
                 <input type="radio" name="config_bgcolor_1" id="config_bgcolor_1_1" value="preset_1" checked="checked" /><label for="config_bgcolor_1_1" class="config_bgcolor_sample config_bgcolor_sample_1">■</label>
                 <input type="radio" name="config_bgcolor_1" id="config_bgcolor_1_2" value="preset_2"                   /><label for="config_bgcolor_1_2" class="config_bgcolor_sample config_bgcolor_sample_2">■</label>
@@ -140,7 +148,7 @@
           </div>
           <div class="sequence_align">
             <div>
-              <span>揃え方向: </span>
+              <span lang="ja">揃え方向: </span><span lang="en" class="hideByLanguage">Alignment: </span>
               <span>
                 <input type="radio" name="config_align_1" id="config_align_1_left"   value="left"                     /><label for="config_align_1_left"   >←</label>
                 <input type="radio" name="config_align_1" id="config_align_1_right"  value="right"  checked="checked" /><label for="config_align_1_right"  >→</label>
@@ -153,7 +161,7 @@
         <!-- その2 -->
         <div id="sequence_2" class="sequence">
           <div class="sequence_header">
-            <input type="checkbox" id="sequence_enable_2" class="sequence_enable" checked="checked" /><label for="sequence_enable_2">2番目</label>
+            <input type="checkbox" id="sequence_enable_2" class="sequence_enable" checked="checked" /><label for="sequence_enable_2"><span lang="ja">2番目</span><span lang="en" class="hideByLanguage">2nd</span></label for="sequence_enable_2">
           </div>
           <div class="preview_in_sequence_container">
             <!-- アクティブ時のプレビュー表示（デフォルト非表示） -->
@@ -161,18 +169,18 @@
           </div>
           <div class="sequence_text">
             <div class="sequence_call">
-              <label for="config_call_2">コール: </label><input type="text" id="config_call_2" value="Sweet" />
+              <label for="config_call_2"><span lang="ja">コール: </span><span lang="en" class="hideByLanguage">Call: </span></label for="config_call_2"><input type="text" id="config_call_2" value="Sweet" />
             </div>
             <div class="sequence_attribute">
-              <label for="config_attribute_2">属性: </label><input type="text" id="config_attribute_2" value="Tsundere" />
+              <label for="config_attribute_2"><span lang="ja">属性: </span><span lang="en" class="hideByLanguage">Attribute: </span></label for="config_attribute_2"><input type="text" id="config_attribute_2" value="Tsundere" />
             </div>
             <div class="sequence_name">
-              <label for="config_name_2">名前: </label><input type="text" id="config_name_2" value="Kaho Hinata" />
+              <label for="config_name_2"><span lang="ja">名前: </span><span lang="en" class="hideByLanguage">Name: </span></label for="config_name_2"><input type="text" id="config_name_2" value="Kaho Hinata" />
             </div>
           </div>
           <div class="sequence_bgcolor">
             <div>
-              <span>背景色: </span>
+              <span lang="ja">背景色: </span><span lang="en" class="hideByLanguage">Background: </span>
               <span>
                 <input type="radio" name="config_bgcolor_2" id="config_bgcolor_2_1" value="preset_1"                   /><label for="config_bgcolor_2_1" class="config_bgcolor_sample config_bgcolor_sample_1">■</label>
                 <input type="radio" name="config_bgcolor_2" id="config_bgcolor_2_2" value="preset_2" checked="checked" /><label for="config_bgcolor_2_2" class="config_bgcolor_sample config_bgcolor_sample_2">■</label>
@@ -187,7 +195,7 @@
           </div>
           <div class="sequence_align">
             <div>
-              <span>揃え方向: </span>
+              <span lang="ja">揃え方向: </span><span lang="en" class="hideByLanguage">Alignment: </span>
               <span>
                 <input type="radio" name="config_align_2" id="config_align_2_left"   value="left"   checked="checked" /><label for="config_align_2_left"   >←</label>
                 <input type="radio" name="config_align_2" id="config_align_2_right"  value="right"                    /><label for="config_align_2_right"  >→</label>
@@ -200,7 +208,7 @@
         <!-- その3 -->
         <div id="sequence_3" class="sequence">
           <div class="sequence_header">
-            <input type="checkbox" id="sequence_enable_3" class="sequence_enable" checked="checked" /><label for="sequence_enable_3">3番目</label>
+            <input type="checkbox" id="sequence_enable_3" class="sequence_enable" checked="checked" /><label for="sequence_enable_3"><span lang="ja">3番目</span><span lang="en" class="hideByLanguage">3rd</span></label for="sequence_enable_3">
           </div>
           <div class="preview_in_sequence_container">
             <!-- アクティブ時のプレビュー表示（デフォルト非表示） -->
@@ -208,18 +216,18 @@
           </div>
           <div class="sequence_text">
             <div class="sequence_call">
-              <label for="config_call_3">コール: </label><input type="text" id="config_call_3" value="Sister" />
+              <label for="config_call_3"><span lang="ja">コール: </span><span lang="en" class="hideByLanguage">Call: </span></label for="config_call_3"><input type="text" id="config_call_3" value="Sister" />
             </div>
             <div class="sequence_attribute">
-              <label for="config_attribute_3">属性: </label><input type="text" id="config_attribute_3" value="Imouto" />
+              <label for="config_attribute_3"><span lang="ja">属性: </span><span lang="en" class="hideByLanguage">Attribute: </span></label for="config_attribute_3"><input type="text" id="config_attribute_3" value="Imouto" />
             </div>
             <div class="sequence_name">
-              <label for="config_name_3">名前: </label><input type="text" id="config_name_3" value="Mafuyu Hoshikawa" />
+              <label for="config_name_3"><span lang="ja">名前: </span><span lang="en" class="hideByLanguage">Name: </span></label for="config_name_3"><input type="text" id="config_name_3" value="Mafuyu Hoshikawa" />
             </div>
           </div>
           <div class="sequence_bgcolor">
             <div>
-              <span>背景色: </span>
+              <span lang="ja">背景色: </span><span lang="en" class="hideByLanguage">Background: </span>
               <span>
                 <input type="radio" name="config_bgcolor_3" id="config_bgcolor_3_1" value="preset_1"                   /><label for="config_bgcolor_3_1" class="config_bgcolor_sample config_bgcolor_sample_1">■</label>
                 <input type="radio" name="config_bgcolor_3" id="config_bgcolor_3_2" value="preset_2"                   /><label for="config_bgcolor_3_2" class="config_bgcolor_sample config_bgcolor_sample_2">■</label>
@@ -234,7 +242,7 @@
           </div>
           <div class="sequence_align">
             <div>
-              <span>揃え方向: </span>
+              <span lang="ja">揃え方向: </span><span lang="en" class="hideByLanguage">Alignment: </span>
               <span>
                 <input type="radio" name="config_align_3" id="config_align_3_left"   value="left"                     /><label for="config_align_3_left"   >←</label>
                 <input type="radio" name="config_align_3" id="config_align_3_right"  value="right"  checked="checked" /><label for="config_align_3_right"  >→</label>
@@ -247,7 +255,7 @@
         <!-- その4 -->
         <div id="sequence_4" class="sequence">
           <div class="sequence_header">
-            <input type="checkbox" id="sequence_enable_4" class="sequence_enable" checked="checked" /><label for="sequence_enable_4">4番目</label>
+            <input type="checkbox" id="sequence_enable_4" class="sequence_enable" checked="checked" /><label for="sequence_enable_4"><span lang="ja">4番目</span><span lang="en" class="hideByLanguage">4th</span></label for="sequence_enable_4">
           </div>
           <div class="preview_in_sequence_container">
             <!-- アクティブ時のプレビュー表示（デフォルト非表示） -->
@@ -255,18 +263,18 @@
           </div>
           <div class="sequence_text">
             <div class="sequence_call">
-              <label for="config_call_4">コール: </label><input type="text" id="config_call_4" value="Sadistic" />
+              <label for="config_call_4"><span lang="ja">コール: </span><span lang="en" class="hideByLanguage">Call: </span></label for="config_call_4"><input type="text" id="config_call_4" value="Sadistic" />
             </div>
             <div class="sequence_attribute">
-              <label for="config_attribute_4">属性: </label><input type="text" id="config_attribute_4" value="Oneesan" />
+              <label for="config_attribute_4"><span lang="ja">属性: </span><span lang="en" class="hideByLanguage">Attribute: </span></label for="config_attribute_4"><input type="text" id="config_attribute_4" value="Oneesan" />
             </div>
             <div class="sequence_name">
-              <label for="config_name_4">名前: </label><input type="text" id="config_name_4" value="Miu Amano" />
+              <label for="config_name_4"><span lang="ja">名前: </span><span lang="en" class="hideByLanguage">Name: </span></label for="config_name_4"><input type="text" id="config_name_4" value="Miu Amano" />
             </div>
           </div>
           <div class="sequence_bgcolor">
             <div>
-              <span>背景色: </span>
+              <span lang="ja">背景色: </span><span lang="en" class="hideByLanguage">Background: </span>
               <span>
                 <input type="radio" name="config_bgcolor_4" id="config_bgcolor_4_1" value="preset_1"                   /><label for="config_bgcolor_4_1" class="config_bgcolor_sample config_bgcolor_sample_1">■</label>
                 <input type="radio" name="config_bgcolor_4" id="config_bgcolor_4_2" value="preset_2"                   /><label for="config_bgcolor_4_2" class="config_bgcolor_sample config_bgcolor_sample_2">■</label>
@@ -281,7 +289,7 @@
           </div>
           <div class="sequence_align">
             <div>
-              <span>揃え方向: </span>
+              <span lang="ja">揃え方向: </span><span lang="en" class="hideByLanguage">Alignment: </span>
               <span>
                 <input type="radio" name="config_align_4" id="config_align_4_left"   value="left"   checked="checked" /><label for="config_align_4_left"   >←</label>
                 <input type="radio" name="config_align_4" id="config_align_4_right"  value="right"                    /><label for="config_align_4_right"  >→</label>
@@ -294,7 +302,7 @@
         <!-- その5 -->
         <div id="sequence_5" class="sequence">
           <div class="sequence_header">
-            <input type="checkbox" id="sequence_enable_5" class="sequence_enable" checked="checked" /><label for="sequence_enable_5">5番目</label>
+            <input type="checkbox" id="sequence_enable_5" class="sequence_enable" checked="checked" /><label for="sequence_enable_5"><span lang="ja">5番目</span><span lang="en" class="hideByLanguage">5th</span></label for="sequence_enable_5">
           </div>
           <div class="preview_in_sequence_container">
             <!-- アクティブ時のプレビュー表示（デフォルト非表示） -->
@@ -302,18 +310,18 @@
           </div>
           <div class="sequence_text">
             <div class="sequence_call">
-              <label for="config_call_5">コール: </label><input type="text" id="config_call_5" value="Surprise" />
+              <label for="config_call_5"><span lang="ja">コール: </span><span lang="en" class="hideByLanguage">Call: </span></label for="config_call_5"><input type="text" id="config_call_5" value="Surprise" />
             </div>
             <div class="sequence_attribute">
-              <label for="config_attribute_5">属性: </label><input type="text" id="config_attribute_5" value="Idol" />
+              <label for="config_attribute_5"><span lang="ja">属性: </span><span lang="en" class="hideByLanguage">Attribute: </span></label for="config_attribute_5"><input type="text" id="config_attribute_5" value="Idol" />
             </div>
             <div class="sequence_name">
-              <label for="config_name_5">名前: </label><input type="text" id="config_name_5" value="Hideri Kanzaki" />
+              <label for="config_name_5"><span lang="ja">名前: </span><span lang="en" class="hideByLanguage">Name: </span></label for="config_name_5"><input type="text" id="config_name_5" value="Hideri Kanzaki" />
             </div>
           </div>
           <div class="sequence_bgcolor">
             <div>
-              <span>背景色: </span>
+              <span lang="ja">背景色: </span><span lang="en" class="hideByLanguage">Background: </span>
               <span>
                 <input type="radio" name="config_bgcolor_5" id="config_bgcolor_5_1" value="preset_1"                   /><label for="config_bgcolor_5_1" class="config_bgcolor_sample config_bgcolor_sample_1">■</label>
                 <input type="radio" name="config_bgcolor_5" id="config_bgcolor_5_2" value="preset_2"                   /><label for="config_bgcolor_5_2" class="config_bgcolor_sample config_bgcolor_sample_2">■</label>
@@ -328,7 +336,7 @@
           </div>
           <div class="sequence_align">
             <div>
-              <span>揃え方向: </span>
+              <span lang="ja">揃え方向: </span><span lang="en" class="hideByLanguage">Alignment: </span>
               <span>
                 <input type="radio" name="config_align_5" id="config_align_5_left"   value="left"                     /><label for="config_align_5_left"   >←</label>
                 <input type="radio" name="config_align_5" id="config_align_5_right"  value="right"                    /><label for="config_align_5_right"  >→</label>
@@ -341,7 +349,7 @@
         <!-- その6 -->
         <div id="sequence_6" class="sequence">
           <div class="sequence_header">
-            <input type="checkbox" id="sequence_enable_6" class="sequence_enable" checked="checked" /><label for="sequence_enable_6">6番目</label>
+            <input type="checkbox" id="sequence_enable_6" class="sequence_enable" checked="checked" /><label for="sequence_enable_6"><span lang="ja">6番目</span><span lang="en" class="hideByLanguage">6th</span></label for="sequence_enable_6">
           </div>
           <div class="preview_in_sequence_container">
             <!-- アクティブ時のプレビュー表示（デフォルト非表示） -->
@@ -349,18 +357,18 @@
           </div>
           <div class="sequence_text">
             <div class="sequence_call">
-              <label for="config_call_6">コール: </label><input type="text" id="config_call_6" value="Service" />
+              <label for="config_call_6"><span lang="ja">コール: </span><span lang="en" class="hideByLanguage">Call: </span></label for="config_call_6"><input type="text" id="config_call_6" value="Service" />
             </div>
             <div class="sequence_attribute">
-              <label for="config_attribute_6">属性: </label><input type="text" id="config_attribute_6" value="" />
+              <label for="config_attribute_6"><span lang="ja">属性: </span><span lang="en" class="hideByLanguage">Attribute: </span></label for="config_attribute_6"><input type="text" id="config_attribute_6" value="" />
             </div>
             <div class="sequence_name">
-              <label for="config_name_6">名前: </label><input type="text" id="config_name_6" value="" />
+              <label for="config_name_6"><span lang="ja">名前: </span><span lang="en" class="hideByLanguage">Name: </span></label for="config_name_6"><input type="text" id="config_name_6" value="" />
             </div>
           </div>
           <div class="sequence_bgcolor">
             <div>
-              <span>背景色: </span>
+              <span lang="ja">背景色: </span><span lang="en" class="hideByLanguage">背景色: </span>
               <span>
                 <input type="radio" name="config_bgcolor_6" id="config_bgcolor_6_1" value="preset_1"                   /><label for="config_bgcolor_6_1" class="config_bgcolor_sample config_bgcolor_sample_1">■</label>
                 <input type="radio" name="config_bgcolor_6" id="config_bgcolor_6_2" value="preset_2"                   /><label for="config_bgcolor_6_2" class="config_bgcolor_sample config_bgcolor_sample_2">■</label>
@@ -375,7 +383,7 @@
           </div>
           <div class="sequence_align">
             <div>
-              <span>揃え方向: </span>
+              <span lang="ja">揃え方向: </span><span lang="en" class="hideByLanguage">Alignment: </span>
               <span>
                 <input type="radio" name="config_align_6" id="config_align_6_left"   value="left"                     /><label for="config_align_6_left"   >←</label>
                 <input type="radio" name="config_align_6" id="config_align_6_right"  value="right"                    /><label for="config_align_6_right"  >→</label>
@@ -389,7 +397,7 @@
       <!-- 利用者操作UI領域2 -->
       <div id="operation_area2" class="operation_area">
         <span>
-          <button id="config_reset"><span>設定リセット</span></button>
+          <button id="config_reset"><span lang="ja">設定リセット</span><span lang="en" class="hideByLanguage">Reset</span></button>
         </span>
       </div>
       <!-- 利用者操作UI領域3 -->
@@ -397,13 +405,13 @@
         <div class="pane replay_url_pane">
           <div class="replay_url_header">
             <div class="description">
-              <sapn>再現URL</sapn>
+              <sapn lang="ja">再現URL</sapn><sapn lang="en" class="hideByLanguage">Replay URL</sapn>
             </div>
             <button id="copy_replay_url">
-              <span>コピー</span>
+              <span lang="ja">コピー</span><span lang="en" class="hideByLanguage">Copy</span>
             </button>
             <div id="copied_balloon" class="copied_balloon">
-              <span>コピーしました</span>
+              <span lang="ja">コピーしました</span><span lang="en" class="hideByLanguage">Copied</span>
             </div>
           </div>
           <textarea id="replay_url" readonly></textarea>
@@ -412,14 +420,15 @@
       <hr />
       <div id="share">
         <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        <div class="fb-share-button" data-layout="button" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u&amp;src=sdkpreparse">シェア</a></div>
+        <div class="fb-share-button" data-layout="button" data-size="small" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u&amp;src=sdkpreparse"><span>シェア</span></a></div>
         <div class="g-plus" data-action="share" data-annotation="none"></div>
         <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
         <div class="line-it-button shareln" style="display: none;" data-lang="ja" data-type="share-a"></div><script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
       </div>
       <hr />
       <div id="author">
-        <span>作成者：びるず(<a href="https://twitter.com/billstw" target="_blank">twitter:@billstw</a>)</span>
+        <span lang="ja">作成者：びるず(<a href="https://twitter.com/billstw" target="_blank">twitter:@billstw</a>)</span>
+        <span lang="en" class="hideByLanguage">Author：bills(<a href="https://twitter.com/billstw" target="_blank">twitter:@billstw</a>)</span>
       </div>
       <div id="thanks">
         <span>Special Thanks:</span>
@@ -428,8 +437,10 @@
         <a href="https://github.com/eligrey/FileSaver.js/" target="_blank">FileSaver.js</a>
         <a href="https://bgrins.github.io/spectrum/" target="_blank">Spectrum</a>
         <a href="https://github.com/js-cookie/js-cookie" target="_blank">js-cookie</a>
-        <a href="https://www.oreilly.co.jp/books/9784873116877/" target="_blank">プログラミング HTML5 Canvas</a>
-        <a href="https://www.oreilly.co.jp/books/9784873117669/" target="_blank">CSSシークレット</a>
+        <a lang="ja" href="https://www.oreilly.co.jp/books/9784873116877/" target="_blank">プログラミング HTML5 Canvas</a>
+        <a lang="en" class="hideByLanguage" href="https://www.oreilly.com/library/view/core-html5-canvas/9780132761635/" target="_blank">Core HTML5 Canvas</a>
+        <a lang="ja" href="https://www.oreilly.co.jp/books/9784873117669/" target="_blank">CSSシークレット</a>
+        <a lang="en" class="hideByLanguage" href="http://shop.oreilly.com/product/0636920031123.do" target="_blank">CSS Secrets</a>
         <span>...and others</span>
       </div>
       <div id="copyright">
@@ -439,8 +450,8 @@
         <span>This software is released under the <a href="http://opensource.org/licenses/mit-license.php" target="_blank">MIT License </a>.</span>
       </div>
       <div id="privacy_policy">
-        <span><a href="privacy_policy.html">プライバシーポリシー/Privacy policy</a></span>
+        <span><a href="privacy_policy.html"><span lang="ja">プライバシーポリシー</span><span lang="en" class="hideByLanguage">Privacy policy</span></a></span>
       </div>
     </div> <!-- content_area -->
   </body>
-</html>
+</html
