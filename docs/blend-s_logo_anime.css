@@ -31,6 +31,34 @@ body {
   font-family: "ヒラギノ丸ゴ Pro W4","ヒラギノ丸ゴ Pro","Hiragino Maru Gothic Pro","ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","Meiryo";
 }
 
+/* 言語選択状態による非表示 */
+.hideByLanguage {
+  display: none !important;
+}
+
+/* タイトルと日英切替を横並び */
+header {
+  margin: 0 auto 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* タイトル */
+#body_title {
+  width: 85%;
+}
+
+/* 日英切替 */
+.header-right {
+  width: 15%;
+  padding: 0.5em 0.5em 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
 /* タイトルおよび直下の説明文をインデント */
 #body_title, #description {
   margin-left: 50px;
@@ -643,6 +671,21 @@ input[type="text"] {
  */
 @media (max-width: 600px) {
 
+/* タイトルおよび日英切替を縦並び */
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 日英切替を中央寄せ */
+.header-right {
+  padding: 0.5em 0 0.5em 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+  
 /* タイトルおよび直下の説明文インデント縮小 */
 #body_title, #description {
   margin-left: 20px;
