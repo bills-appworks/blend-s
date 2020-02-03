@@ -508,10 +508,6 @@ input[type="radio"] {
   margin: 0.5em;
 }
 
-#copy_replay_url {
-  font-size: small;
-}
-
 /* 再現URLテキスト */
 #replay_url {
   width: 100%;
