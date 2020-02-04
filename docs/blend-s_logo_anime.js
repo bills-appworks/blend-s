@@ -1638,7 +1638,7 @@ $(function() {
     // シーケンス毎の設定
     for (var i = 1 ; i <= animation_definition.default_config.sequence_number ; i++) {
       // n番目（有効／無効チェック）
-      $('#sequence_enable_' + i).prop('checked', config.animation_priority_time);
+      $('#sequence_enable_' + i).prop('checked', config.sequence[i -1].enable);
       // コール
       $('#config_call_' + i).val(config.sequence[i - 1].call);
       // 属性
